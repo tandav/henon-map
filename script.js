@@ -1,50 +1,69 @@
-var width = 600;
-var height = 300;
- 
-var holder = d3.select("body")
-    .append("svg")
-    .attr("width", width)    
-    .attr("height", height); 
+TESTER = document.getElementById('xy_plot');
+// Plotly.plot( TESTER, [{
+// x: [1, 2, 3, 4, 5],
+// y: [1, 2, 4, 8, 16] }], {
+// margin: { t: 0 } } );
 
-// draw the circle
-holder.append("circle")
-    .attr("cx", 300)
-    .attr("cy", 150) 
-    // .style("fill", "none")   
-    .style("stroke", "blue") 
-    .attr("r", 120);
+// function myFunction() {
+//     var x = document.getElementById("myInput").value;
+//     document.getElementById("text").innerHTML = "You wrote: " + x;
+// }
 
-// when the input range changes update the circle 
-d3.select("#nRadius").on("input", function() {
-    update(+this.value);
-});
+function range(start, count) {
+      return Array.apply(0, Array(count))
+        .map(function (element, index) { 
+          return index + start;  
+      });
+}
 
-// Initial starting radius of the circle 
-update(120);
+var X = []
+var Y = []
+var henon_xn = {
+    // x: [0.1],
+    // y: [0.02],
+    x: X,
+    y: Y,
+    mode: 'markers',
+    type: 'scatter',
+    marker: { size: 3 }
+};
 
-// update the elements
-function update(nRadius) {
-    // adjust the text on the range slider
-    d3.select("#nRadius-value").text(nRadius);
-    d3.select("#nRadius").property("value", nRadius);
+var henon_xy = {
+    // x: [0.1],
+    // y: [0.02],
+    x: X,
+    y: Y,
+    mode: 'markers',
+    type: 'scatter',
+    marker: { size: 3 }
+};
 
-    // update the rircle radius
-    holder.selectAll("circle") 
-        .attr("r", nRadius);
+var r = 5.5
+
+var xy_layout = {
+    xaxis: {range: [-r, r]},
+    yaxis: {range: [-r, r]}
+};
+
+function myFunction2() {
+    var a = document.getElementById("a_slider").value;
+    var b = document.getElementById("b_slider").value;
+    X = [0.1]
+    Y = [0.02]
+    for (var i = 0; i < 200; i++) {
+        var x_next = 1 - a * X[X.length-1]**2 + Y[Y.length-1]
+        var y_next = b * X[X.length-1]
+        X.push(x_next)
+        Y.push(y_next)
+    }
+    henon_xn.x = range(0, X.length)
+    log(range(0, X.length))
+    henon_xn.y = X
+    Plotly.newPlot(TESTER, [henon_xn], xy_layout);`
+
+    henon_xy.x = X
+    henon_xy.y = Y
+	Plotly.newPlot(TESTER, [henon_xy], xy_layout);
 }
 
 
-// --- --- --- --- --- --- --- --- --- 
-var data = [[5,3], [10,17], [15,4], [2,8]];
-
-var margin = {top: 20, right: 15, bottom: 60, left: 60};
-var width = 960 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
-
-// var x = d3.scale.linear()
-//     .domain([0, d3.max(data, function(d) { return d[0]; })])
-//     .range([ 0, width ]);
-
-// var y = d3.scale.linear()
-//     .domain([0, d3.max(data, function(d) { return d[1]; })])
-//     .range([ height, 0 ]);
