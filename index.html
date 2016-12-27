@@ -1,27 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>Input test (circle)</title>
-	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="main.css">
-</head>
-<body>
-<p>
-  <label for="nRadius" 
-         style="display: inline-block; width: 240px; text-align: right">
-         radius = <span id="nRadius-value">…</span>
-  </label>
-  <input type="range" min="1" max="150" id="nRadius">
-</p>
-<script type="text/javascript" src="script.js"></script>
-</body>
+  <head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>The d3 test</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+  </head>
+  <body>
+    <!-- <div id="tester" style="width:600px;height:250px;"></div> -->
+    <div id="xn_plot"></div>
+    <div id="yn_plot"></div>
+    <div id="xy_plot"></div>
+    <script src="script.js"></script>
+
+        <label>a <input type="range" id="a_slider" min="-0.5" max="2.5" step="0.001" oninput="myFunction2()">
+    </label>
+
+    <label>b <input type="range" id="b_slider" min="-0.5" max="1.2" step="0.001" oninput="myFunction2()">
+    </label>
+
+    <div id="text" style="width:600px;height:250px;"></div>
+  </body>
 </html>
-
-
-
-
-
-
-
-
