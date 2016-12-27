@@ -1,0 +1,27 @@
+/*body {
+  background-color: #ccc;
+}
+#visualization {
+  margin: 50px; 
+  width: 500px; 
+  height: 400px; 
+  border-radius: 4px;
+  border: 1px solid #eee;
+  background-color: #fff; 
+}*/
+
+#xn_plot {
+	width:50%;
+	height:50%;
+}
+
+#yn_plot {
+	width:50%;
+	height:50%;
+}
+
+#xy_plot {
+	width:50%;
+	height:100%;
+}
+
