@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <title>The d3 test</title>
-    <link rel="stylesheet" type="text/css" href="main.css">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script src="d3/d3.js"></script>
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-  </head>
-  <body>
-    <!-- <div id="tester" style="width:600px;height:250px;"></div> -->
-    <div id="xn_plot"></div>
-    <div id="yn_plot"></div>
-    <div id="xy_plot"></div>
+    </head>
+    <body>
+    <div class='content'>
+        <label class="labels">a<input type="range" id="a_slider" min="-0.5" max="2.5" step="0.0001" value="-0.1" oninput="redraw()"></label>
+
+        <label class="labels">b<input type="range" id="b_slider" min="-0.5" max="1.2" step="0.0001" value = "1.0" oninput="redraw()"></label>
+    </div>
     <script src="script.js"></script>
-
-        <label>a <input type="range" id="a_slider" min="-0.5" max="2.5" step="0.001" oninput="myFunction2()">
-    </label>
-
-    <label>b <input type="range" id="b_slider" min="-0.5" max="1.2" step="0.001" oninput="myFunction2()">
-    </label>
-
-    <div id="text" style="width:600px;height:250px;"></div>
-  </body>
+    <a class="github-button" href="https://github.com/tandav" data-style="mega" aria-label="Follow @tandav on GitHub">Follow @tandav</a>
+    </body>
 </html>
