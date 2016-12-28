@@ -1,5 +1,10 @@
 .chart {
     background-color: #edf3ff;
+
+}
+
+. xn_plot {
+    background-color: #edf3ff;
 }
 
 .main text {
@@ -9,6 +14,7 @@
     "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", 
     "Fira Sans", "Droid Sans", "Helvetica Neue", 
     sans-serif;
+
 }
 
 .axis line, .axis path {

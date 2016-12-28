@@ -1,8 +1,14 @@
 var n = 1000;
 var r = 5.5;
-var margin = {top: 20, right: 15, bottom: 60, left: 60}
+var margin = {top: 0, right: 0, bottom: 20, left: 20}
 var width = 500 - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom;
+
+var xn_plot = d3.select('body')
+	.append('svg:svg')
+	.attr('width', width + margin.right + margin.left)
+	.attr('height', height + margin.top + margin.bottom)
+	.attr('class', 'xn_plot')
 
 var chart = d3.select('body')
 	.append('svg:svg')
@@ -14,8 +20,8 @@ var main = chart.append('g')
 	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 	.attr('width', width)
 	.attr('height', height)
-	.attr('class', 'main')   
-	
+	.attr('class', 'main')
+
 // x and y scales, I've used linear here but there are other options
 // the scales translate data values to pixel values for you
 // scales are constand (TODO zoom-sliders)
@@ -40,6 +46,8 @@ var yAxis = d3.axisLeft(y)
 	.attr('transform', 'translate(0,0)')
 	.attr('class', 'main axis date')
 	.call(yAxis);
+
+
 
 // draw the graph object
 var g = main.append("svg:g"); 
