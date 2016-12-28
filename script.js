@@ -64,7 +64,7 @@ function redraw()
 		ydata.push(y_next);
 	}
 
-	g.selectAll("*").remove();
+	g.selectAll("*").remove(); //without that line old data remains
 	g.selectAll("scatter-dots")
 		.data(ydata)  // using the values in the ydata array
 		.enter().append("svg:circle")  // create a new circle for each value

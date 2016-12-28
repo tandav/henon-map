@@ -1,0 +1,36 @@
+.chart {
+    background-color: #edf3ff;
+}
+
+.main text {
+    /*font: 20px -apple-system;  */
+	font-size: 1em;
+    font-family: -apple-system, BlinkMacSystemFont, 
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", 
+    "Fira Sans", "Droid Sans", "Helvetica Neue", 
+    sans-serif;
+}
+
+.axis line, .axis path {
+    shape-rendering: crispEdges;
+    stroke: black;
+    fill: none;
+}
+
+circle {
+    fill: steelblue;
+}
+
+label {
+	font-size: 2em;
+	font-family: -apple-system, BlinkMacSystemFont, 
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", 
+    "Fira Sans", "Droid Sans", "Helvetica Neue", 
+    sans-serif;
+}
+
+
+input[type=range] {
+  width: 100%;
+  /*margin-bottom: 10px;*/
+}

@@ -4,32 +4,14 @@
         <meta charset="utf-8">
         <title>D3 Test</title>
         <script src="d3/d3.js"></script>
-        <style>
-.chart {
-    background-color: #edf3ff;
-}
+        <link rel="stylesheet" type="text/css" href="main.css">
 
-.main text {
-    font: 10px sans-serif;  
-}
-
-.axis line, .axis path {
-    shape-rendering: crispEdges;
-    stroke: black;
-    fill: none;
-}
-
-circle {
-    fill: steelblue;
-}
-
-</style>
     </head>
     <body>
     <div class='content'>
-        <label>a<input type="range" id="a_slider" min="-0.5" max="2.5" step="0.0001" value="-0.1" oninput="redraw()"></label>
+        <label class="labels">a<input type="range" id="a_slider" min="-0.5" max="2.5" step="0.0001" value="-0.1" oninput="redraw()"></label>
 
-        <label>b<input type="range" id="b_slider" min="-0.5" max="1.2" step="0.0001" value = "1.0" oninput="redraw()"></label>
+        <label class="labels">b<input type="range" id="b_slider" min="-0.5" max="1.2" step="0.0001" value = "1.0" oninput="redraw()"></label>
     </div>
         <script src="script.js"></script>
     </body>
