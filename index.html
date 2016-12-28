@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>Input test (circle)</title>
-	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="main.css">
-</head>
-<body>
-<p>
-  <label for="nRadius" 
-         style="display: inline-block; width: 240px; text-align: right">
-         radius = <span id="nRadius-value">…</span>
-  </label>
-  <input type="range" min="1" max="150" id="nRadius">
-</p>
-<script type="text/javascript" src="script.js"></script>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script src="d3/d3.js"></script>
+        <style>
+.chart {
+
+}
+
+.main text {
+    font: 10px sans-serif;  
+}
+
+.axis line, .axis path {
+    shape-rendering: crispEdges;
+    stroke: black;
+    fill: none;
+}
+
+circle {
+    fill: steelblue;
+}
+
+</style>
+    </head>
+    <body>
+    
+    <div class='content'>
+        <label>a<input type="range" id="a_slider" min="-0.5" max="2.5" step="0.001" oninput="myFunction1()"></label>
+
+        <label>b<input type="range" id="b_slider" min="-0.5" max="1.2" step="0.001" oninput="myFunction2()"></label>
+    </div>
+        <script src="script.js"></script>
+
+
+
+<!--         <script>
+            d3.select("body")
+                .append("p")
+                .text("New paragraph!");
+        </script> -->
+    </body>
 </html>
-
-
-
-
-
-
-
-
