@@ -1,6 +1,35 @@
-var n = 1000;
+var n = 200;
 var r = 5.5;
-var margin = {top: 0, right: 0, bottom: 20, left: 20}
+
+var a_min = -1.5;
+var a_max = 2.5;
+var b_min = -0.5;
+var b_max = 1.2;
+
+
+document.querySelector('#a_slider').min = a_min;
+document.querySelector('#a_slider').max = a_max;
+document.querySelector('#b_slider').min = b_min;
+document.querySelector('#b_slider').max = b_max;
+
+document.querySelector('#a_slider').value = (a_min + a_max) / 2;
+document.querySelector('#b_slider').value = (b_min + b_max) / 2;
+
+var inputs = document.querySelectorAll('input');
+[].forEach.call(inputs, function(inp) {
+  inp.step = 0.001;
+});
+
+
+
+var margin = 
+{
+	top: 0, 
+	right: 0, 
+	bottom: 20,
+	left: 20
+}
+
 var width = 500 - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom;
 
@@ -15,6 +44,8 @@ var chart = d3.select('body')
 	.attr('width', width + margin.right + margin.left)
 	.attr('height', height + margin.top + margin.bottom)
 	.attr('class', 'chart')
+	.on('mousemove', mouse_mooved);
+	// .attr("onmousemove", "mouse_mooved(event)")
 
 var main = chart.append('g')
 	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
@@ -33,6 +64,14 @@ var x = d3.scaleLinear()
 var y = d3.scaleLinear()
 	.domain([-r, r])
 	.range([ height, 0 ]);
+
+var a_scale = d3.scaleLinear()
+	.domain([a_min, a_max])
+	.range([0, width])
+
+var b_scale = d3.scaleLinear()
+	.domain([b_min, b_max])
+	.range([height, 0])
 
 // draw the x axis
 var xAxis = d3.axisBottom(x)
@@ -63,6 +102,7 @@ function redraw()
 	var a = document.getElementById("a_slider").value;
 	var b = document.getElementById("b_slider").value;
 
+
 	// Henon Map
 	for (var i = 0; i < n; i++) 
 	{
@@ -80,8 +120,33 @@ function redraw()
 		.attr("cx", function (d,i) { return x(xdata[i]); } ) // translate x value
 		.attr("r", 1) // radius of circle
 		.style("opacity", 1.0); // opacity of circle
+		document.querySelector('#a_out').value = a;
+		document.querySelector('#b_out').value = b;
 }
 
+// chart.on('mousemove', function () {
+// 	var mouse_xy = [0, 0];
+// 	mouse_xy = d3.mouse(this);
+// 	document.querySelector('#a_slider').value = mouse_xy[0];
+// 	document.querySelector('#b_slider').value = mouse_xy[1];
+// 	document.querySelector('#a_out').value = mouse_xy[0];
+// 	document.querySelector('#b_out').value = mouse_xy[1];   
+// 	redraw()     
+// });
+
+
+// function mouse_mooved(event)
+function mouse_mooved() 
+{
+	// var mouse_xy = [0, 0];
+	var mouse_xy = d3.mouse(this);
+	document.querySelector('#a_slider').value = a_scale.invert(mouse_xy[0]);
+	document.querySelector('#b_slider').value = a_scale.invert(mouse_xy[1]);
+	document.querySelector('#a_out').value = b_scale.invert(mouse_xy[0]);
+	document.querySelector('#b_out').value = b_scale.invert(mouse_xy[1]);
+	redraw();
+
+}
 // redraw(initial);
 
 // function slider_mooved() 
