@@ -1,13 +1,20 @@
-.chart {
+
+
+.xy_plot {
+    /*display: none;*/
+    width: 500;
+    height: 500;
     background-color: #edf3ff;
 
 }
 
-. xn_plot {
+.xn_plot {
     background-color: #edf3ff;
+    display: none;
 }
 
-.main text {
+
+.xy_plot text {
     /*font: 20px -apple-system;  */
 	font-size: 1em;
     font-family: -apple-system, BlinkMacSystemFont, 
@@ -24,7 +31,7 @@
 }
 
 circle {
-    fill: steelblue;
+    fill: black;
 }
 
 /*label {
@@ -41,7 +48,7 @@ input[type=range] {
   /*margin-bottom: 10px;*/
 }
 
-. content text{
+. body text{
     font-size: 2em;
     font-family: -apple-system, BlinkMacSystemFont, 
     "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", 

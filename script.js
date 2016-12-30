@@ -1,4 +1,4 @@
-var n = 200;
+var n = 500; // number of points
 var r = 5.5;
 
 var a_min = -1.5;
@@ -6,12 +6,10 @@ var a_max = 2.5;
 var b_min = -0.5;
 var b_max = 1.2;
 
-
 document.querySelector('#a_slider').min = a_min;
 document.querySelector('#a_slider').max = a_max;
 document.querySelector('#b_slider').min = b_min;
 document.querySelector('#b_slider').max = b_max;
-
 document.querySelector('#a_slider').value = (a_min + a_max) / 2;
 document.querySelector('#b_slider').value = (b_min + b_max) / 2;
 
@@ -22,36 +20,28 @@ var inputs = document.querySelectorAll('input');
 
 
 
-var margin = 
-{
-	top: 0, 
-	right: 0, 
-	bottom: 20,
-	left: 20
-}
-
-var width = 500 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
+var width = 500;
+var height = 500;
 
 var xn_plot = d3.select('body')
 	.append('svg:svg')
-	.attr('width', width + margin.right + margin.left)
-	.attr('height', height + margin.top + margin.bottom)
-	.attr('class', 'xn_plot')
-
-var chart = d3.select('body')
-	.append('svg:svg')
-	.attr('width', width + margin.right + margin.left)
-	.attr('height', height + margin.top + margin.bottom)
-	.attr('class', 'chart')
-	.on('mousemove', mouse_mooved);
-	// .attr("onmousemove", "mouse_mooved(event)")
-
-var main = chart.append('g')
-	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 	.attr('width', width)
 	.attr('height', height)
-	.attr('class', 'main')
+	.attr('class', 'xn_plot')
+
+var xy_plot = d3.select('xn-plot')
+	.append('svg')
+	// .attr('width', width + margin.right + margin.left)
+	// .attr('height', height + margin.top + margin.bottom)
+	.attr('class', 'xy_plot')
+	.on('mousemove', mouse_mooved)
+	// .attr("onmousemove", "mouse_mooved(event)")
+
+// var main = xy_plot.append('g')
+// 	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+// 	.attr('width', width)
+// 	.attr('height', height)
+// 	.attr('class', 'main')
 
 // x and y scales, I've used linear here but there are other options
 // the scales translate data values to pixel values for you
@@ -75,21 +65,34 @@ var b_scale = d3.scaleLinear()
 
 // draw the x axis
 var xAxis = d3.axisBottom(x)
-main.append('g')
+xy_plot.append('g')
 	.attr('transform', 'translate(0,' + height + ')')
 	.attr('class', 'main axis date')
 	.call(xAxis);
 // draw the y axis
 var yAxis = d3.axisLeft(y)
-	main.append('g')
-	.attr('transform', 'translate(0,0)')
+	xy_plot.append('g')
+	// .attr('transform', 'translate(0,0)')
+	.attr('transform', 'translate(0,' + width + ')')
 	.attr('class', 'main axis date')
 	.call(yAxis);
 
 
+// // draw the x axis
+// var xAxis = d3.axisBottom(x)
+// main.append('g')
+// 	.attr('transform', 'translate(0,' + height + ')')
+// 	.attr('class', 'main axis date')
+// 	.call(xAxis);
+// // draw the y axis
+// var yAxis = d3.axisLeft(y)
+// 	main.append('g')
+// 	.attr('transform', 'translate(0,0)')
+// 	.attr('class', 'main axis date')
+// 	.call(yAxis);
 
 // draw the graph object
-var g = main.append("svg:g"); 
+var g = xy_plot.append("svg:g"); 
 
 function redraw() 
 {
@@ -124,18 +127,6 @@ function redraw()
 		document.querySelector('#b_out').value = b;
 }
 
-// chart.on('mousemove', function () {
-// 	var mouse_xy = [0, 0];
-// 	mouse_xy = d3.mouse(this);
-// 	document.querySelector('#a_slider').value = mouse_xy[0];
-// 	document.querySelector('#b_slider').value = mouse_xy[1];
-// 	document.querySelector('#a_out').value = mouse_xy[0];
-// 	document.querySelector('#b_out').value = mouse_xy[1];   
-// 	redraw()     
-// });
-
-
-// function mouse_mooved(event)
 function mouse_mooved() 
 {
 	// var mouse_xy = [0, 0];
@@ -148,8 +139,3 @@ function mouse_mooved()
 
 }
 // redraw(initial);
-
-// function slider_mooved() 
-// {
-
-// }

@@ -13,3 +13,8 @@ web visualisation of henon map
 	* maybe add trackpad zoom
 
 * можно сделать background heatmap - среднее арифметическое расстояний от (0, 0) до всех точек при заданных [a, b]
+
+* mouse-hover not working correctly (not all svg chart is hovering)
+
+---
+* сделать мини проект где subplots

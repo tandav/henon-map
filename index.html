@@ -6,32 +6,23 @@
         <script src="d3/d3.js"></script>
         <link rel="stylesheet" type="text/css" href="main.css">
         <script async defer src="https://buttons.github.io/buttons.js"></script>
-
     </head>
+
     <body>
+        <div id='xn-plot'></div>
+        <div id='yn-plot'></div>
+        <div class='xy-plot'>
+            <label for="a_slider">a</label>
+            <input type="range" id="a_slider" oninput="redraw()">
+            <output for="a_slider" id="a_out"></output>
 
-    <div class='content'>
-        <label for="a_slider">a</label>
-        <input type="range" id="a_slider" oninput="redraw()">
-        <output for="a_slider" id="a_out"></output>
+            <label for="b_slider">b</label>
+            <input type="range" id="b_slider" oninput="redraw()">
+            <output for="b_slider" id="b_out"></output>
+        </div>
 
-        <label for="b_slider">b</label>
-        <input type="range" id="b_slider" oninput="redraw()">
-        <output for="b_slider" id="b_out"></output>
-    </div>
-
-<!--     <div class='content'>
-        <label for="a_slider">a</label>
-        <input type="range" id="a_slider" min="-1.5" max="2.5" step="0.0001" value="-0.1" oninput="redraw()">
-        <output for="a_slider" id="a_out"></output>
-
-        <label for="b_slider">b</label>
-        <input type="range" id="b_slider" min="-0.5" max="1.2" step="0.0001" value="-0.1" oninput="redraw()">
-        <output for="b_slider" id="b_out"></output>
-    </div> -->
-
-
-    <script src="script.js"></script>
-    <a class="github-button" href="https://github.com/tandav" data-style="mega" aria-label="Follow @tandav on GitHub">Follow @tandav</a>
+        <script src="script.js"></script>
+        <a href="https://en.wikipedia.org/wiki/Hénon_map">Henon Map</a>
+        <a class="github-button" href="https://github.com/tandav/Henon-Map" data-style="mega">Github Repo</a>
     </body>
 </html>
