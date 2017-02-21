@@ -37,6 +37,7 @@ h1 {
     sans-serif;
     /*text-align: center;*/
 }
+
 .axis line, .axis path {
     shape-rendering: crispEdges;
     stroke: black;
