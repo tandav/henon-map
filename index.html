@@ -9,12 +9,15 @@
 
     </head>
     <body>
-    <div class='content'>
-        <label class="labels">a<input type="range" id="a_slider" min="-0.5" max="2.5" step="0.0001" value="-0.1" oninput="redraw()"></label>
+        <div class='controls'>
+            <label class="labels">a<input type="range" id="a_slider" min="-0.5" max="2.5" step="0.0001" value="-0.1" oninput="redraw()"></label>
 
-        <label class="labels">b<input type="range" id="b_slider" min="-0.5" max="1.2" step="0.0001" value = "1.0" oninput="redraw()"></label>
-    </div>
-    <script src="script.js"></script>
-    <a class="github-button" href="https://github.com/tandav" data-style="mega" aria-label="Follow @tandav on GitHub">Follow @tandav</a>
+            <label class="labels">b<input type="range" id="b_slider" min="-0.5" max="1.2" step="0.0001" value = "1.0" oninput="redraw()"></label>
+        </div>
+        <div class="charts"></div>
+        <script src="script.js"></script>
+        <div class="links" align="right">
+            <a class="github-button" href="https://github.com/tandav/Henon-Map" data-style="mega" aria-label="Follow @tandav on GitHub">Github</a>
+        </div>
     </body>
 </html>

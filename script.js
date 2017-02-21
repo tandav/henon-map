@@ -1,28 +1,29 @@
-var n = 1000;
+var n = 500;
 var r = 5.5;
 var margin = {top: 0, right: 0, bottom: 20, left: 20}
 var width = 500 - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom;
 
-var xn_plot = d3.select('body')
-	.append('svg:svg')
-	.attr('width', width + margin.right + margin.left)
-	.attr('height', height + margin.top + margin.bottom)
-	.attr('class', 'xn_plot')
+// var xn_plot = d3.select("body")
+// 	.append("svg:svg")
+// 	.attr("width", width + margin.right + margin.left)
+// 	.attr("height", height + margin.top + margin.bottom)
+// 	.attr("class", "xn_plot")
 
-var chart = d3.select('body')
-	.append('svg:svg')
-	.attr('width', width + margin.right + margin.left)
-	.attr('height', height + margin.top + margin.bottom)
-	.attr('class', 'chart')
+// var xy_chart = d3.select("body")
+var xy_chart = d3.select("body").select(".charts")
+	.append("svg:svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+	.attr("class", "xy_chart")
 
-var main = chart.append('g')
-	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-	.attr('width', width)
-	.attr('height', height)
-	.attr('class', 'main')
+var main = xy_chart.append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+	.attr("width", width)
+	.attr("height", height)
+	.attr("class", "main")
 
-// x and y scales, I've used linear here but there are other options
+// x and y scales, I"ve used linear here but there are other options
 // the scales translate data values to pixel values for you
 // scales are constand (TODO zoom-sliders)
 var x = d3.scaleLinear()
@@ -36,15 +37,15 @@ var y = d3.scaleLinear()
 
 // draw the x axis
 var xAxis = d3.axisBottom(x)
-main.append('g')
-	.attr('transform', 'translate(0,' + height + ')')
-	.attr('class', 'main axis date')
+main.append("g")
+	.attr("transform", "translate(0," + height + ")")
+	.attr("class", "main axis date")
 	.call(xAxis);
 // draw the y axis
 var yAxis = d3.axisLeft(y)
-	main.append('g')
-	.attr('transform', 'translate(0,0)')
-	.attr('class', 'main axis date')
+	main.append("g")
+	.attr("transform", "translate(0,0)")
+	.attr("class", "main axis date")
 	.call(yAxis);
 
 

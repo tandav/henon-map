@@ -1,9 +1,14 @@
-.chart {
-    background-color: #edf3ff;
-
+.charts {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
-. xn_plot {
+.xy_chart {
+    background-color: #edf3f3;
+}
+
+.xn_plot {
     background-color: #edf3ff;
 }
 
@@ -39,4 +44,8 @@ label {
 input[type=range] {
   width: 100%;
   /*margin-bottom: 10px;*/
+}
+
+.links {
+    margin: 1em;
 }
