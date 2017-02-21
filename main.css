@@ -22,6 +22,9 @@
 
 }
 
+h1 {
+    text-align: center;
+}
 .axis line, .axis path {
     shape-rendering: crispEdges;
     stroke: black;
@@ -33,7 +36,7 @@ circle {
 }
 
 label {
-	font-size: 2em;
+	font-size: 1em;
 	font-family: -apple-system, BlinkMacSystemFont, 
     "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", 
     "Fira Sans", "Droid Sans", "Helvetica Neue", 
@@ -48,4 +51,5 @@ input[type=range] {
 
 .links {
     margin: 1em;
+    float: right;
 }
