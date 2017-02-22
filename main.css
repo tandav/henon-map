@@ -1,18 +1,36 @@
+/*.charts svg {
+    background-color: black;
+}
+*/
 
+.charts {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /*width: 100vw;*/
+    /*height: 25vw;*/
+    /*background-color: lightgrey;*/
+}
 
-.xy_plot {
-    /*display: none;*/
-    width: 500;
-    height: 500;
-    background-color: #edf3ff;
-
+.n_plots {
+    display: flex;
+    flex-direction: column;
+    /*width: 25vw;*/
+    /*height: 100%; /* mb del */*/
+    /*margin-right: 0.5vw;*/
 }
 
 .xn_plot {
-    background-color: #edf3ff;
-    display: none;
+    background-color: skyblue;
 }
 
+.yn_plot {
+    background-color: tomato;
+}
+
+.xy_plot {
+    background-color: grey;
+}
 
 .xy_plot text {
     /*font: 20px -apple-system;  */
