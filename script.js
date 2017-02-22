@@ -1,5 +1,6 @@
-var small_chart_height = "20vw";
-var all_charts_width = "41vw"; // small_chart_height*2 + 1vw_margin
+var small_chart_height = 250;
+var all_charts_width = small_chart_height*2 +10;
+// var all_charts_width = "41vw"; // small_chart_height*2 + 1vw_margin
 var n_plots = d3.select(".n_plots");
 
 n_plots.append("svg")

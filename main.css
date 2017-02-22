@@ -11,17 +11,17 @@
 
 .xn_plot {
     background-color: skyblue;
-    margin-bottom: 0.5vw;
+    margin-bottom: 5px;
 }
 
 .yn_plot {
     background-color: tomato;
-    margin-top: 0.5vw; /*need better margins*/
+    margin-top: 5px; /*need better margins*/
 }
 
 .xy_plot {
     background-color: grey;
-    margin-left: 1vw;
+    margin-left: 10px;
 }
 
 .xy_plot text {
