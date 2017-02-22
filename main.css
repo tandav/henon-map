@@ -1,35 +1,27 @@
-/*.charts svg {
-    background-color: black;
-}
-*/
-
 .charts {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    /*width: 100vw;*/
-    /*height: 25vw;*/
-    /*background-color: lightgrey;*/
 }
 
 .n_plots {
     display: flex;
     flex-direction: column;
-    /*width: 25vw;*/
-    /*height: 100%; /* mb del */*/
-    /*margin-right: 0.5vw;*/
 }
 
 .xn_plot {
     background-color: skyblue;
+    margin-bottom: 0.5vw;
 }
 
 .yn_plot {
     background-color: tomato;
+    margin-top: 0.5vw; /*need better margins*/
 }
 
 .xy_plot {
     background-color: grey;
+    margin-left: 1vw;
 }
 
 .xy_plot text {
