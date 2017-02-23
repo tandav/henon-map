@@ -21,22 +21,21 @@ var xy_plot = d3.select(".charts").append("svg")
 	.attr("class", "xy_plot")
 
 //------------------------------------------------
-// xn plot
+// xn_plot
 var xn_plot_xScale = d3.scaleLinear()
 	.domain([0, n]) // the range of the values to plot
-	.range([ 2*margin, all_charts_width ]); // the pixel range of the x-axis
+	.range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
 	// .domain([0, d3.max(xdata)]) // the range of the values to plot
 	// .range([ 0, width ]); // the pixel range of the x-axis
 var xn_plot_yScale = d3.scaleLinear()
 	.domain([-radius, radius])
-	.range([ small_chart_height - 20, 0 ]);
+	.range([ small_chart_height - margin, margin ]);
 
 // draw the x axis
 var xn_xAxis = d3.axisBottom(xn_plot_xScale)
 xn_plot.append("g")
-	// .attr("transform", "translate(0," + all_charts_width - 20 + ")")
-	.attr("transform", "translate(0, 490)")
-	.attr("transform", "translate(0," + (small_chart_height - 2*margin) + ")")
+	.attr("transform", "translate(" + (margin) + ", " + (small_chart_height/2) + ")")
+	// .attr("transform", "translate(0," + (small_chart_height - 2*margin) + ")")
 	.call(xn_xAxis);
 // draw the y axis
 var xn_yAxis = d3.axisLeft(xn_plot_yScale)
@@ -45,23 +44,23 @@ xn_plot.append("g")
 	.attr("transform", "translate(" + (2*margin) + ",0)")
 	.call(xn_yAxis);
 
+
 //------------------------------------------------
-// yn plot
+// yn_plot
 var yn_plot_xScale = d3.scaleLinear()
 	.domain([0, n]) // the range of the values to plot
-	.range([ 2*margin, all_charts_width ]); // the pixel range of the x-axis
+	.range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
 	// .domain([0, d3.max(xdata)]) // the range of the values to plot
 	// .range([ 0, width ]); // the pixel range of the x-axis
 var yn_plot_yScale = d3.scaleLinear()
 	.domain([-radius, radius])
-	.range([ small_chart_height - 20, 0 ]);
+	.range([ small_chart_height - margin, margin ]);
 
 // draw the x axis
 var yn_xAxis = d3.axisBottom(yn_plot_xScale)
 yn_plot.append("g")
-	// .attr("transform", "translate(0," + all_charts_width - 20 + ")")
-	// .attr("transform", "translate(0, 490)")
-	.attr("transform", "translate(0," + (small_chart_height - 2*margin) + ")")
+	.attr("transform", "translate(" + (margin) + ", " + (small_chart_height/2) + ")")
+	// .attr("transform", "translate(0," + (small_chart_height - 2*margin) + ")")
 	.call(yn_xAxis);
 // draw the y axis
 var yn_yAxis = d3.axisLeft(yn_plot_yScale)
@@ -72,25 +71,25 @@ yn_plot.append("g")
 
 
 //------------------------------------------------
-// xy_plot
+// xy_plot TODO make int the cross miidle of plot (0,0) in center
 var xy_plot_xScale = d3.scaleLinear()
 	.domain([-radius, radius]) // the range of the values to plot
-	.range([ 2*margin, all_charts_width ]); // the pixel range of the x-axis
+	.range([ 2*margin, all_charts_width - 2 *margin]); // the pixel range of the x-axis
 	// .domain([0, d3.max(xdata)]) // the range of the values to plot
 	// .range([ 0, width ]); // the pixel range of the x-axis
 var xy_plot_yScale = d3.scaleLinear()
 	.domain([-radius, radius])
-	.range([ all_charts_width - 20, 0 ]);
+	.range([ all_charts_width - margin, margin ]);
 
 // draw the x axis
 var xy_xAxis = d3.axisBottom(xy_plot_xScale)
 xy_plot.append("g")
 	// .attr("transform", "translate(0," + all_charts_width - 20 + ")")
-	.attr("transform", "translate(0, 490)")
-	.attr("transform", "translate(0," + (all_charts_width - 2*margin) + ")")
+	// .attr("transform", "translate(0, 490)")
+	.attr("transform", "translate(0," + (all_charts_width/2) + ")")
 	.call(xy_xAxis);
 // draw the y axis
 var xy_yAxis = d3.axisLeft(xy_plot_yScale)
 xy_plot.append("g")
-	.attr("transform", "translate(" + (2*margin) + ",0)")
+	.attr("transform", "translate(" + (all_charts_width/2) + ",0)")
 	.call(xy_yAxis);
