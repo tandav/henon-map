@@ -24,12 +24,12 @@ var xy_plot = d3.select(".charts").append("svg")
 // xn plot
 var xn_plot_xScale = d3.scaleLinear()
 	.domain([0, n]) // the range of the values to plot
-	.range([ 0, all_charts_width ]); // the pixel range of the x-axis
+	.range([ 2*margin, all_charts_width ]); // the pixel range of the x-axis
 	// .domain([0, d3.max(xdata)]) // the range of the values to plot
 	// .range([ 0, width ]); // the pixel range of the x-axis
 var xn_plot_yScale = d3.scaleLinear()
 	.domain([-radius, radius])
-	.range([ small_chart_height, 0 ]);
+	.range([ small_chart_height - 20, 0 ]);
 
 // draw the x axis
 var xn_xAxis = d3.axisBottom(xn_plot_xScale)
@@ -49,12 +49,12 @@ xn_plot.append("g")
 // yn plot
 var yn_plot_xScale = d3.scaleLinear()
 	.domain([0, n]) // the range of the values to plot
-	.range([ 0, all_charts_width ]); // the pixel range of the x-axis
+	.range([ 2*margin, all_charts_width ]); // the pixel range of the x-axis
 	// .domain([0, d3.max(xdata)]) // the range of the values to plot
 	// .range([ 0, width ]); // the pixel range of the x-axis
 var yn_plot_yScale = d3.scaleLinear()
 	.domain([-radius, radius])
-	.range([ small_chart_height, 0 ]);
+	.range([ small_chart_height - 20, 0 ]);
 
 // draw the x axis
 var yn_xAxis = d3.axisBottom(yn_plot_xScale)
@@ -75,12 +75,12 @@ yn_plot.append("g")
 // xy_plot
 var xy_plot_xScale = d3.scaleLinear()
 	.domain([-radius, radius]) // the range of the values to plot
-	.range([ 0, all_charts_width ]); // the pixel range of the x-axis
+	.range([ 2*margin, all_charts_width ]); // the pixel range of the x-axis
 	// .domain([0, d3.max(xdata)]) // the range of the values to plot
 	// .range([ 0, width ]); // the pixel range of the x-axis
 var xy_plot_yScale = d3.scaleLinear()
 	.domain([-radius, radius])
-	.range([ all_charts_width, 0 ]);
+	.range([ all_charts_width - 20, 0 ]);
 
 // draw the x axis
 var xy_xAxis = d3.axisBottom(xy_plot_xScale)
