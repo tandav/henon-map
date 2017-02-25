@@ -9,9 +9,9 @@ var radius = 10; // x and y axes scope
 // var b_max = 1.2;
 
 var a_min = -0.43;
-var a_max = 1.2;
+var a_max = 0.96;
 var b_min = -0.5;
-var b_max = 10.2;
+var b_max = 2.1;
 
 // var x_init = 0.1;
 // var y_init = 0.2;
@@ -124,7 +124,7 @@ var b_scale = d3.scaleLinear()
 	.range([all_charts_width, 0])
 
 var color = d3.scaleLinear() // for heatmap
-	.domain([0, radius*2])
+	.domain([0, radius])
 	// .domain([0, 1e6])
 	.range(["#aaaaaa", "#ffffff"]);
 	// .range(["#8b0000", "#FFF0F0"]);
@@ -150,7 +150,7 @@ for (var i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 		var x_curr = x_init;
 		var y_curr = y_init;
 		var remoteness = 0; 
-		
+		var counter = 0;
 		// Henon Map
 		for (var k = 0; k < n; k++)
 		{
@@ -167,14 +167,16 @@ for (var i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 			// 	// remoteness = 1e6; 
 			// 	break; 
 			// }
-			if (Math.abs(x_curr) < radius*2 && Math.abs(y_curr) < radius*2) {
-				remoteness += Math.abs(x_curr) + Math.abs(y_curr);
+			var dist = Math.sqrt(x_curr*x_curr + y_curr*y_curr);
+			if (dist < radius) {
+				remoteness += dist;
+				counter++;
 			} else { 
 				// remoteness = 1e6; 
 				break; 
 			}
 		}
-		heatmap.push(remoteness);
+		heatmap.push(remoteness/counter);
 	}
 }
 
