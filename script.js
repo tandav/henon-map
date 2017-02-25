@@ -263,22 +263,29 @@ for (var i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 			// }
 		}
 		var coolness;
-		if (points.length > 200) {
-			coolness = arr.variance(points) * points.length;
-			// coolness = arr.variance(points) * points.length * points.length;
+
+
+		// coolness = Math.exp(points.length * Math.abs(arr.max(points) - arr.min(points)));
+		// if (coolness > badass) {
+		// 	badass = coolness;
+		// }
+
+		if (points.length > 200 && Math.abs(arr.max(points) - arr.min(points)) > 0.8) {
+			coolness = points.length * Math.abs(arr.max(points) - arr.min(points));
 			if (coolness > badass) {
 				badass = coolness;
 			}
 		}
 		else {coolness = 0;} // "fake badass" 
+
+
 		heatmap.push(coolness);
-		// console.log(coolness);
 	}
 }
 
 console.log("badass: ", badass);
 var color = d3.scaleLinear() // for heatmap
-	.domain([0, badass/50])
+	.domain([0, badass])
 	// .domain([0, 1e6])
 	.range(["#aaaaaa", "#ffffff"]);
 	// .range(["#8b0000", "#FFF0F0"]);
@@ -296,7 +303,7 @@ xy_heatmap.selectAll("rect") // background heatmap
         .attr("y", function(d,i) { return i % hmap_rect_per_side * hmap_rect_size; })
         .attr("width", hmap_rect_size)
         .attr("height", hmap_rect_size)
-        .attr('opacity', 0.7)
+        .attr('opacity', 0.8)
         .attr("fill", color);
 //////////////////////////////////////////////////////////////////
 
