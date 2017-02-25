@@ -7,13 +7,20 @@
         <link rel="stylesheet" type="text/css" href="main.css">
         <script async defer src="https://buttons.github.io/buttons.js"></script>
     </head>
-
     <body>
-    <div class="charts">
-        <div class="n_plots"></div>
-    </div>
+        <div class="header">
+            <h1>Henon Map</h1>
+            <a class="github-button" href="https://github.com/tandav/Henon-Map" data-style="mega" aria-label="Follow @tandav on GitHub">Github</a>
+        </div>
+
+        <div class='controls'>
+            <label class="labels">a<input type="range" id="a_slider" min="-0.5" max="2.5" step="0.0001" value="-0.1" oninput="redraw()"></label>
+
+            <label class="labels">b<input type="range" id="b_slider" min="-0.5" max="1.2" step="0.0001" value = "1.0" oninput="redraw()"></label>
+        </div>
+        <div class="charts">
+            <div class="n_plots"></div>
+        </div>
         <script src="script.js"></script>
     </body>
 </html>
-
-<!-- хз мб svg тоже сдесь объявлять? -->

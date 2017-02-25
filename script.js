@@ -25,6 +25,7 @@ var xy_plot = d3.select(".charts").append("svg")
 var xn_plot_xScale = d3.scaleLinear()
 	.domain([0, n]) // the range of the values to plot
 	.range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
+
 	// .domain([0, d3.max(xdata)]) // the range of the values to plot
 	// .range([ 0, width ]); // the pixel range of the x-axis
 var xn_plot_yScale = d3.scaleLinear()
@@ -71,7 +72,7 @@ yn_plot.append("g")
 
 
 //------------------------------------------------
-// xy_plot TODO make int the cross miidle of plot (0,0) in center
+// xy_plot
 var xy_plot_xScale = d3.scaleLinear()
 	.domain([-radius, radius]) // the range of the values to plot
 	.range([ 2*margin, all_charts_width - 2 *margin]); // the pixel range of the x-axis

@@ -18,10 +18,16 @@
     background-color: tomato;
     margin-top: 5px; /*need better margins*/
 }
-
+  
 .xy_plot {
     background-color: grey;
     margin-left: 10px;
+}
+  
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .charts text {
@@ -34,6 +40,16 @@
 
 }
 
+h1 {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", 
+    "Fira Sans", "Droid Sans", "Helvetica Neue", 
+    sans-serif;
+    /*text-align: center;*/
+}
+
 .axis line, .axis path {
     shape-rendering: crispEdges;
     stroke: black;
@@ -44,25 +60,21 @@ circle {
     fill: black;
 }
 
-/*label {
-	font-size: 2em;
-	font-family: -apple-system, BlinkMacSystemFont, 
-    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", 
-    "Fira Sans", "Droid Sans", "Helvetica Neue", 
-    sans-serif;
-}*/
-
 
 input[type=range] {
   width: 100%;
   /*margin-bottom: 10px;*/
 }
 
-body text{
+body text {
     font-size: 2em;
     font-family: -apple-system, BlinkMacSystemFont, 
     "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", 
     "Fira Sans", "Droid Sans", "Helvetica Neue", 
     sans-serif;
 
+.links {
+    display: inline;
+    margin: 1em;
+    float: right;
 }
