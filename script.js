@@ -1,15 +1,22 @@
-var n = 200;
+var n = 1000;
 var small_chart_height = 250;
 var margin = 10;
 var all_charts_width = small_chart_height*2 + margin;
 var radius = 10; // x and y axes scope
-var a_min = -1.5;
+// var a_min = -1.5;
+// var a_max = 1.2;
+// var b_min = -0.5;
+// var b_max = 1.2;
+
+var a_min = -2;
 var a_max = 1.2;
 var b_min = -0.5;
-var b_max = 1.2;
+var b_max = 10.2;
 
+// var x_init = 0.1;
+// var y_init = 0.2;
 var x_init = 0.1;
-var y_init = 0.2;
+var y_init = 0.8;
 
 document.querySelector("#a_slider").min = a_min;
 document.querySelector("#a_slider").max = a_max;
@@ -117,7 +124,8 @@ var b_scale = d3.scaleLinear()
 	.range([small_chart_height, 0])
 
 var color = d3.scaleLinear() // for heatmap
-	.domain([0, 1e6])
+	.domain([0, radius*2])
+	// .domain([0, 1e6])
 	.range(["#aaaaaa", "#ffffff"]);
 	// .range(["#8b0000", "#FFF0F0"]);
 var xy_heatmap = xy_plot.append("g");
@@ -128,6 +136,7 @@ var xy_dots = xy_plot.append("g");
 //////////////////////////////////////////////////////////////////
 // DRAW BACKGROUND HEATMAP ///////////////////////////////////////
 var hmap_rect_per_side = 510/6; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
+// var hmap_rect_per_side = 510/3; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
 var hmap_rect_size = Math.floor(all_charts_width / hmap_rect_per_side);
 // var heatmap  = [12, 20];
 var heatmap  = [];
@@ -149,12 +158,19 @@ for (var i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 
 			var x_curr = 1 - a * Math.pow(x_prev, 2) + y_prev;
 			var y_curr = b * x_prev;
-
-			if (Math.abs(x_curr) < 1e6 && Math.abs(y_curr) < 1e6) {
+			
+			// // prevent infinity
+			// if (Math.abs(x_curr) < 1e6 && Math.abs(y_curr) < 1e6) {
+			// 	remoteness += Math.abs(x_curr) + Math.abs(y_curr);
+			// } else { 
+			// 	// remoteness = 1e6; 
+			// 	break; 
+			// }
+			if (Math.abs(x_curr) < radius*2 && Math.abs(y_curr) < radius*2) {
 				remoteness += Math.abs(x_curr) + Math.abs(y_curr);
-			} else {
+			} else { 
 				// remoteness = 1e6; 
-				break; // prevent infinity
+				break; 
 			}
 		}
 		heatmap.push(remoteness);
