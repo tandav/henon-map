@@ -8,7 +8,7 @@ var radius = 10; // x and y axes scope
 // var b_min = -0.5;
 // var b_max = 1.2;
 
-var a_min = -2;
+var a_min = -0.43;
 var a_max = 1.2;
 var b_min = -0.5;
 var b_max = 10.2;
@@ -121,7 +121,7 @@ var a_scale = d3.scaleLinear()
 
 var b_scale = d3.scaleLinear()
 	.domain([b_min, b_max])
-	.range([small_chart_height, 0])
+	.range([all_charts_width, 0])
 
 var color = d3.scaleLinear() // for heatmap
 	.domain([0, radius*2])
@@ -132,6 +132,7 @@ var xy_heatmap = xy_plot.append("g");
 var xn_dots = xn_plot.append("g");
 var yn_dots = yn_plot.append("g");
 var xy_dots = xy_plot.append("g");
+var xy_pointer = xy_plot.append("g");
 
 //////////////////////////////////////////////////////////////////
 // DRAW BACKGROUND HEATMAP ///////////////////////////////////////
@@ -241,6 +242,14 @@ function redraw() {
 		.attr("cy", function (d) { return xy_plot_yScale(d); } ) // translate y value to a pixel
 		.attr("r", 1) // radius of circle
 		.style("opacity", 1.0); // opacity of circle
+	
+	xy_pointer.selectAll("circle").remove();
+	xy_pointer.append("svg:circle")  // create a new circle for each value
+		.attr("cx", a_scale(a) ) // translate x value
+		.attr("cy", b_scale(b) ) // translate y value to a pixel
+		.attr("r", 3) // radius of circle
+		.style("opacity", 1.0) // opacity of circle
+		.attr("class", "pointer");
 }
 
 function mouse_mooved() 

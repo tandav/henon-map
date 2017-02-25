@@ -73,6 +73,10 @@ label {
     sans-serif;
 }
 
+.pointer {
+    fill: red;
+
+}
 
 input[type=range] {
   width: 100%;
