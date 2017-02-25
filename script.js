@@ -1,91 +1,96 @@
-var n = 500;
-var r = 5.5;
-var margin = {top: 0, right: 0, bottom: 20, left: 20}
-var width = 500 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
+var n = 100;
+var small_chart_height = 250;
+var margin = 10;
+var all_charts_width = small_chart_height*2 + margin;
+// var all_charts_width = "41vw"; // small_chart_height*2 + 1vw_margin
+// var n_plots = d3.select(".n_plots");
+var radius = 5.5;
+xn_plot = d3.select(".n_plots").append("svg")
+	.attr("width", all_charts_width)
+	.attr("height", small_chart_height)
+	.attr("class", "xn_plot")
 
-// var xn_plot = d3.select("body")
-// 	.append("svg:svg")
-// 	.attr("width", width + margin.right + margin.left)
-// 	.attr("height", height + margin.top + margin.bottom)
-// 	.attr("class", "xn_plot")
+yn_plot = d3.select(".n_plots").append("svg")
+	.attr("width", all_charts_width)
+	.attr("height", small_chart_height)
+	.attr("class", "yn_plot")
 
-// var xy_chart = d3.select("body")
-var xy_chart = d3.select("body").select(".charts")
-	.append("svg:svg")
-	.attr("width", width + margin.right + margin.left)
-	.attr("height", height + margin.top + margin.bottom)
-	.attr("class", "xy_chart")
+var xy_plot = d3.select(".charts").append("svg")
+	.attr("width", all_charts_width)
+	.attr("height", all_charts_width)
+	.attr("class", "xy_plot")
 
-var main = xy_chart.append("g")
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-	.attr("width", width)
-	.attr("height", height)
-	.attr("class", "main")
+//------------------------------------------------
+// xn_plot
+var xn_plot_xScale = d3.scaleLinear()
+	.domain([0, n]) // the range of the values to plot
+	.range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
 
-// x and y scales, I"ve used linear here but there are other options
-// the scales translate data values to pixel values for you
-// scales are constand (TODO zoom-sliders)
-var x = d3.scaleLinear()
-	.domain([-r, r]) // the range of the values to plot
-	.range([ 0, width ]); // the pixel range of the x-axis
 	// .domain([0, d3.max(xdata)]) // the range of the values to plot
 	// .range([ 0, width ]); // the pixel range of the x-axis
-var y = d3.scaleLinear()
-	.domain([-r, r])
-	.range([ height, 0 ]);
+var xn_plot_yScale = d3.scaleLinear()
+	.domain([-radius, radius])
+	.range([ small_chart_height - margin, margin ]);
 
 // draw the x axis
-var xAxis = d3.axisBottom(x)
-main.append("g")
-	.attr("transform", "translate(0," + height + ")")
-	.attr("class", "main axis date")
-	.call(xAxis);
+var xn_xAxis = d3.axisBottom(xn_plot_xScale)
+xn_plot.append("g")
+	.attr("transform", "translate(" + (margin) + ", " + (small_chart_height/2) + ")")
+	// .attr("transform", "translate(0," + (small_chart_height - 2*margin) + ")")
+	.call(xn_xAxis);
 // draw the y axis
-var yAxis = d3.axisLeft(y)
-	main.append("g")
-	.attr("transform", "translate(0,0)")
-	.attr("class", "main axis date")
-	.call(yAxis);
+var xn_yAxis = d3.axisLeft(xn_plot_yScale)
+xn_plot.append("g")
+	// .attr("transform", "translate(20,0)")
+	.attr("transform", "translate(" + (2*margin) + ",0)")
+	.call(xn_yAxis);
 
 
+//------------------------------------------------
+// yn_plot
+var yn_plot_xScale = d3.scaleLinear()
+	.domain([0, n]) // the range of the values to plot
+	.range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
+	// .domain([0, d3.max(xdata)]) // the range of the values to plot
+	// .range([ 0, width ]); // the pixel range of the x-axis
+var yn_plot_yScale = d3.scaleLinear()
+	.domain([-radius, radius])
+	.range([ small_chart_height - margin, margin ]);
 
-// draw the graph object
-var g = main.append("svg:g"); 
+// draw the x axis
+var yn_xAxis = d3.axisBottom(yn_plot_xScale)
+yn_plot.append("g")
+	.attr("transform", "translate(" + (margin) + ", " + (small_chart_height/2) + ")")
+	// .attr("transform", "translate(0," + (small_chart_height - 2*margin) + ")")
+	.call(yn_xAxis);
+// draw the y axis
+var yn_yAxis = d3.axisLeft(yn_plot_yScale)
+yn_plot.append("g")
+	// .attr("transform", "translate(20,0)")
+	.attr("transform", "translate(" + (2*margin) + ",0)")
+	.call(yn_yAxis);
 
-function redraw() 
-{
-// 	g.selectAll("scatter-dots")
-// 		// .exit().remove()
-// 		.data(yy, function(d) { return d; });
-	
-	var xdata = [0.1];
-	var ydata = [0.2];
-	var a = document.getElementById("a_slider").value;
-	var b = document.getElementById("b_slider").value;
 
-	// Henon Map
-	for (var i = 0; i < n; i++) 
-	{
-		var x_next = 1 - a * Math.pow(xdata[xdata.length - 1], 2) + ydata[ydata.length - 1];
-		var y_next = b * xdata[xdata.length - 1];
-		xdata.push(x_next);
-		ydata.push(y_next);
-	}
+//------------------------------------------------
+// xy_plot
+var xy_plot_xScale = d3.scaleLinear()
+	.domain([-radius, radius]) // the range of the values to plot
+	.range([ 2*margin, all_charts_width - 2 *margin]); // the pixel range of the x-axis
+	// .domain([0, d3.max(xdata)]) // the range of the values to plot
+	// .range([ 0, width ]); // the pixel range of the x-axis
+var xy_plot_yScale = d3.scaleLinear()
+	.domain([-radius, radius])
+	.range([ all_charts_width - margin, margin ]);
 
-	g.selectAll("*").remove(); //without that line old data remains
-	g.selectAll("scatter-dots")
-		.data(ydata)  // using the values in the ydata array
-		.enter().append("svg:circle")  // create a new circle for each value
-		.attr("cy", function (d) { return y(d); } ) // translate y value to a pixel
-		.attr("cx", function (d,i) { return x(xdata[i]); } ) // translate x value
-		.attr("r", 1) // radius of circle
-		.style("opacity", 1.0); // opacity of circle
-}
-
-// redraw(initial);
-
-// function slider_mooved() 
-// {
-
-// }
+// draw the x axis
+var xy_xAxis = d3.axisBottom(xy_plot_xScale)
+xy_plot.append("g")
+	// .attr("transform", "translate(0," + all_charts_width - 20 + ")")
+	// .attr("transform", "translate(0, 490)")
+	.attr("transform", "translate(0," + (all_charts_width/2) + ")")
+	.call(xy_xAxis);
+// draw the y axis
+var xy_yAxis = d3.axisLeft(xy_plot_yScale)
+xy_plot.append("g")
+	.attr("transform", "translate(" + (all_charts_width/2) + ",0)")
+	.call(xy_yAxis);
