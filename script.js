@@ -118,8 +118,8 @@ var b_scale = d3.scaleLinear()
 
 var color = d3.scaleLinear() // for heatmap
 	.domain([0, 1e6])
-	// .range(["#646464", "#ffffff"]);
-	.range(["#8b0000", "#FFF0F0"]);
+	.range(["#aaaaaa", "#ffffff"]);
+	// .range(["#8b0000", "#FFF0F0"]);
 var xy_heatmap = xy_plot.append("g");
 var xn_dots = xn_plot.append("g");
 var yn_dots = yn_plot.append("g");

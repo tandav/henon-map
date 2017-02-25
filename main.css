@@ -60,8 +60,9 @@ h1 {
 }
 
 circle {
+    fill: black;
     /*fill: SeaGreen;*/
-    fill: SpringGreen ;
+    /*fill: SpringGreen ;*/
 }
 
 label {
