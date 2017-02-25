@@ -2,14 +2,14 @@ var n = 1000;
 var small_chart_height = 250;
 var margin = 10;
 var all_charts_width = small_chart_height*2 + margin;
-var radius = 10; // x and y axes scope
+var radius = 4; // x and y axes scope
 // var a_min = -1.5;
 // var a_max = 1.2;
 // var b_min = -0.5;
 // var b_max = 1.2;
 
 var a_min = -0.43;
-var a_max = 0.96;
+var a_max = 0.5;
 var b_min = -0.5;
 var b_max = 2.1;
 
@@ -30,6 +30,90 @@ var inputs = document.querySelectorAll("input");
 [].forEach.call(inputs, function(inp) {
   inp.step = 0.001;
 });
+
+var arr = {	
+	max: function(array) {
+		return Math.max.apply(null, array);
+	},
+	
+	min: function(array) {
+		return Math.min.apply(null, array);
+	},
+	
+	range: function(array) {
+		return arr.max(array) - arr.min(array);
+	},
+	
+	midrange: function(array) {
+		return arr.range(array) / 2;
+	},
+
+	sum: function(array) {
+		var num = 0;
+		for (var i = 0, l = array.length; i < l; i++) num += array[i];
+		return num;
+	},
+	
+	mean: function(array) {
+		return arr.sum(array) / array.length;
+	},
+	
+	median: function(array) {
+		array.sort(function(a, b) {
+			return a - b;
+		});
+		var mid = array.length / 2;
+		return mid % 1 ? array[mid - 0.5] : (array[mid - 1] + array[mid]) / 2;
+	},
+	
+	modes: function(array) {
+		if (!array.length) return [];
+		var modeMap = {},
+			maxCount = 0,
+			modes = [];
+
+		array.forEach(function(val) {
+			if (!modeMap[val]) modeMap[val] = 1;
+			else modeMap[val]++;
+
+			if (modeMap[val] > maxCount) {
+				modes = [val];
+				maxCount = modeMap[val];
+			}
+			else if (modeMap[val] === maxCount) {
+				modes.push(val);
+				maxCount = modeMap[val];
+			}
+		});
+		return modes;
+	},
+	
+	variance: function(array) {
+		var mean = arr.mean(array);
+		return arr.mean(array.map(function(num) {
+			return Math.pow(num - mean, 2);
+		}));
+	},
+	
+	standardDeviation: function(array) {
+		return Math.sqrt(arr.variance(array));
+	},
+	
+	meanAbsoluteDeviation: function(array) {
+		var mean = arr.mean(array);
+		return arr.mean(array.map(function(num) {
+			return Math.abs(num - mean);
+		}));
+	},
+	
+	zScores: function(array) {
+		var mean = arr.mean(array);
+		var standardDeviation = arr.standardDeviation(array);
+		return array.map(function(num) {
+			return (num - mean) / standardDeviation;
+		});
+	}
+};
 
 
 var xn_plot = d3.select(".n_plots").append("svg")
@@ -53,20 +137,24 @@ var xy_plot = d3.select(".charts").append("svg")
 // xn_plot
 var xn_plot_xScale = d3.scaleLinear()
 	.domain([0, n]) // the range of the values to plot
-	.range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
+	// .range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
+	.range([ 0, all_charts_width ]); // the pixel range of the x-axis
 var xn_plot_yScale = d3.scaleLinear()
 	.domain([-radius, radius])
-	.range([ small_chart_height - margin, margin ]);
+	// .range([ small_chart_height - margin, margin ]);
+	.range([ small_chart_height, 0 ]);
 
 // draw the x axis
 var xn_xAxis = d3.axisBottom(xn_plot_xScale)
 xn_plot.append("g")
-	.attr("transform", "translate(" + (margin) + ", " + (small_chart_height/2) + ")")
+	// .attr("transform", "translate(" + (margin) + ", " + (small_chart_height/2) + ")")
+	.attr("transform", "translate(0, " + (small_chart_height/2) + ")")
 	.call(xn_xAxis);
 // draw the y axis
 var xn_yAxis = d3.axisLeft(xn_plot_yScale)
 xn_plot.append("g")
-	.attr("transform", "translate(" + (2*margin) + ",0)")
+	// .attr("transform", "translate(" + (2*margin) + ",0)")
+	// .attr("transform", "translate(" + ",0)")
 	.call(xn_yAxis);
 
 
@@ -123,11 +211,7 @@ var b_scale = d3.scaleLinear()
 	.domain([b_min, b_max])
 	.range([all_charts_width, 0])
 
-var color = d3.scaleLinear() // for heatmap
-	.domain([0, radius])
-	// .domain([0, 1e6])
-	.range(["#aaaaaa", "#ffffff"]);
-	// .range(["#8b0000", "#FFF0F0"]);
+
 var xy_heatmap = xy_plot.append("g");
 var xn_dots = xn_plot.append("g");
 var yn_dots = yn_plot.append("g");
@@ -141,7 +225,7 @@ var hmap_rect_per_side = 510/6; // how many small rects per xy_plot side in back
 var hmap_rect_size = Math.floor(all_charts_width / hmap_rect_per_side);
 // var heatmap  = [12, 20];
 var heatmap  = [];
-
+var badass = 0;
 // calculating remoteness of all points caused by (a, b) (we take those (a, b) values that corresponds to the centers of each heatmap rect)
 for (var i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 	for (var j = hmap_rect_size/2; j < all_charts_width; j += hmap_rect_size) {
@@ -150,7 +234,8 @@ for (var i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 		var x_curr = x_init;
 		var y_curr = y_init;
 		var remoteness = 0; 
-		var counter = 0;
+		// var counter = 0;
+		var points = [];
 		// Henon Map
 		for (var k = 0; k < n; k++)
 		{
@@ -160,26 +245,43 @@ for (var i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 			var x_curr = 1 - a * Math.pow(x_prev, 2) + y_prev;
 			var y_curr = b * x_prev;
 			
-			// // prevent infinity
-			// if (Math.abs(x_curr) < 1e6 && Math.abs(y_curr) < 1e6) {
-			// 	remoteness += Math.abs(x_curr) + Math.abs(y_curr);
+			// prevent infinity
+			if (Math.abs(x_curr) < radius && Math.abs(y_curr) < radius) {
+				points.push((Math.abs(x_curr) + Math.abs(y_curr))/2);
+				// remoteness += Math.abs(x_curr) + Math.abs(y_curr);
+			} else { 
+				// remoteness = 1e6; 
+				// break; 
+			}
+			// var dist = Math.sqrt(x_curr*x_curr + y_curr*y_curr);
+			// if (dist < radius) {
+			// 	remoteness += dist;
+			// 	counter++;
 			// } else { 
 			// 	// remoteness = 1e6; 
 			// 	break; 
 			// }
-			var dist = Math.sqrt(x_curr*x_curr + y_curr*y_curr);
-			if (dist < radius) {
-				remoteness += dist;
-				counter++;
-			} else { 
-				// remoteness = 1e6; 
-				break; 
+		}
+		var coolness;
+		if (points.length > 200) {
+			coolness = arr.variance(points) * points.length;
+			// coolness = arr.variance(points) * points.length * points.length;
+			if (coolness > badass) {
+				badass = coolness;
 			}
 		}
-		heatmap.push(remoteness/counter);
+		else {coolness = 0;} // "fake badass" 
+		heatmap.push(coolness);
+		// console.log(coolness);
 	}
 }
 
+console.log("badass: ", badass);
+var color = d3.scaleLinear() // for heatmap
+	.domain([0, badass/50])
+	// .domain([0, 1e6])
+	.range(["#aaaaaa", "#ffffff"]);
+	// .range(["#8b0000", "#FFF0F0"]);
 
 // for (var i = 0; i < (hmap_rect_per_side*hmap_rect_per_side); i++) 
 // {
@@ -209,13 +311,17 @@ function redraw() {
 	// Henon Map
 	for (var i = 0; i < n; i++)
 	{
-		var x = 1 - a * Math.pow(xdata[xdata.length - 1], 2) + ydata[ydata.length - 1];
-		var y = b * xdata[xdata.length - 1];
-		if (Math.abs(x) > 1e6 || Math.abs(y) > 1e6) { break; } // prevent infinity
-		xdata.push(x);
-		ydata.push(y);
-	}
+		var x_curr = 1 - a * Math.pow(xdata[xdata.length - 1], 2) + ydata[ydata.length - 1];
+		var y_curr = b * xdata[xdata.length - 1];
 
+		// prevent infinity
+		if (Math.abs(x_curr) < radius && Math.abs(y_curr) < radius) { 
+			xdata.push(x_curr);
+			ydata.push(y_curr);
+		}
+
+	}
+	// console.log((arr.variance(xdata) + arr.variance(ydata))*xdata.length, arr.max(xdata), xdata.length);
 	// console.log(xdata.length, ydata.length); // always equal (empiric)
 
 	xn_dots.selectAll("*").remove(); //without that line old data remains
@@ -261,3 +367,4 @@ function mouse_mooved()
 	document.getElementById("b_slider").value = b_scale.invert(mouse_xy[1]);
 	redraw();
 }
+
