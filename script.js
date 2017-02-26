@@ -112,23 +112,34 @@ let arr = {
 	}
 };
 
+let xdata = new Array(n).fill(0);
+let ydata = new Array(n).fill(0);
+
+
 const redraw = function(a, b) {
-	let xdata = [x0];
-	let ydata = [y0];
-	// let a = document.getElementById("a_slider").value;
-	// let b = document.getElementById("b_slider").value;
+	// let xdata = [x0];
+	// let ydata = [y0];
+	xdata[0] = x0;
+	ydata[0] = y0;
 
 	// Henon Map
-	for (let i = 0; i < n; i++)
+	for (let i = 1; i <= n; i++)
 	{
-		let x_curr = 1 - a * Math.pow(xdata[xdata.length - 1], 2) + ydata[ydata.length - 1];
-		let y_curr = b * xdata[xdata.length - 1];
+		xdata[i] = 1 - a * Math.pow(xdata[i - 1], 2) + ydata[i - 1];
+		ydata[i] = b * xdata[i - 1];
+
+		// let x_curr = 1 - a * Math.pow(xdata[xdata.length - 1], 2) + ydata[ydata.length - 1];
+		// let y_curr = b * xdata[xdata.length - 1];
 
 		// prevent infinity
 		// if (Math.abs(x_curr) < xmax - xmin && Math.abs(y_curr) < ymax - ymin) {
-		if (Math.abs(x_curr) < 1e6 && Math.abs(y_curr) < 1e6) {
-			xdata.push(x_curr);
-			ydata.push(y_curr);
+		// if (Math.abs(x_curr) < 1e6 && Math.abs(y_curr) < 1e6) {
+		// 	xdata.push(x_curr);
+		// 	ydata.push(y_curr);
+		// }
+		if (Math.abs(xdata[i]) > 1e6 || Math.abs(ydata[i]) > 1e6) {
+			xdata[i] = 0;
+			ydata[i] = 0;
 		}
 
 	}
@@ -204,7 +215,7 @@ let xy_plot = d3.select(".ab_xy_plots").append("svg")
 	.attr("class", "xy_plot")
 	.attr("width", all_charts_width)
 	.attr("height", all_charts_width)
-	.on("mousemove", mouse_mooved);
+	// .on("mousemove", mouse_mooved);
 
 
 //------------------------------------------------
@@ -225,28 +236,6 @@ xn_yn_plot.append("g")
 let xn_yAxis = d3.axisRight(xn_plot_yScale)
 xn_yn_plot.append("g")
 	.call(xn_yAxis);
-
-
-//------------------------------------------------
-// yn_plot
-let yn_plot_xScale = d3.scaleLinear()
-	.domain([0, n]) // the range of the values to plot
-	.range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
-let yn_plot_yScale = d3.scaleLinear()
-	// .domain([ymin, ymax]) // looks not as beautiful as w/ fixed_radius
-	.domain([-fixed_radius, fixed_radius])
-	.range([ small_chart_height - margin, margin ]);
-
-// draw the x axis
-let yn_xAxis = d3.axisBottom(yn_plot_xScale)
-yn_plot.append("g")
-	.attr("transform", "translate(" + (margin) + ", " + (small_chart_height/2) + ")")
-	.call(yn_xAxis);
-// draw the y axis
-let yn_yAxis = d3.axisLeft(yn_plot_yScale)
-yn_plot.append("g")
-	.attr("transform", "translate(" + (2*margin) + ",0)")
-	.call(yn_yAxis);
 
 
 //------------------------------------------------
