@@ -1,5 +1,7 @@
 # Henon-Map
-web visualisation of henon map
+Web visualisation of henon map. 
+
+Most areas of the map are boring. So there is a map of "coolness" in the background which highlighting some enteresting areas. This map was drawn by specific empiric "coolness formula".
 
 ![screenshot](screenshot.png)
 
