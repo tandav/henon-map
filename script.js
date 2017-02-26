@@ -2,21 +2,32 @@ const n = 500;
 const small_chart_height = 250;
 const margin = 10;
 const all_charts_width = small_chart_height*2 + margin;
-const radius = 4; // x and y axes scope
-// let a_min = -1.5;
-// let a_max = 1.2;
-// let b_min = -0.5;
-// let b_max = 1.2;
 
+// x and y axes scope
+// problem, when (xmax - xmin != ymax- ymin) image isnt beautiful (сжатое, не квадратное)
+// также .n_plots центрируются относительно нуля. Можно там все время относительно нуля рисовать,
+//
+// типа .domain([-arr.max(a), xmax]) // the range of the values to plot
+// короче, should be equal
+const fixed_radius = 5; // for .n_plots
+const xy_radius = 7.2;
+
+const xmin = -1.1;
+const xmax = xmin + xy_radius;
+const ymin = -1.1;
+const ymax = ymin + xy_radius;
+
+// a, b scope
 const a_min = -0.43;
 const a_max = 0.5;
 const b_min = -0.5;
 const b_max = 2.1;
 
-// let x_init = 0.1;
-// let y_init = 0.2;
+// const x_init = 0.1;
+// const y_init = 0.2;
 const x_init = 0.1;
 const y_init = 0.8;
+
 
 document.querySelector("#a_slider").min = a_min;
 document.querySelector("#a_slider").max = a_max;
@@ -32,19 +43,19 @@ let inputs = document.querySelectorAll("input");
   inp.step = 0.000001;
 });
 
-let arr = {	
+let arr = {
 	max: function(array) {
 		return Math.max.apply(null, array);
 	},
-	
+
 	min: function(array) {
 		return Math.min.apply(null, array);
 	},
-	
+
 	range: function(array) {
 		return arr.max(array) - arr.min(array);
 	},
-	
+
 	midrange: function(array) {
 		return arr.range(array) / 2;
 	},
@@ -54,11 +65,11 @@ let arr = {
 		for (let i = 0, l = array.length; i < l; i++) num += array[i];
 		return num;
 	},
-	
+
 	mean: function(array) {
 		return arr.sum(array) / array.length;
 	},
-	
+
 	median: function(array) {
 		array.sort(function(a, b) {
 			return a - b;
@@ -66,7 +77,7 @@ let arr = {
 		let mid = array.length / 2;
 		return mid % 1 ? array[mid - 0.5] : (array[mid - 1] + array[mid]) / 2;
 	},
-	
+
 	modes: function(array) {
 		if (!array.length) return [];
 		let modeMap = {},
@@ -88,25 +99,25 @@ let arr = {
 		});
 		return modes;
 	},
-	
+
 	variance: function(array) {
 		let mean = arr.mean(array);
 		return arr.mean(array.map(function(num) {
 			return Math.pow(num - mean, 2);
 		}));
 	},
-	
+
 	standardDeviation: function(array) {
 		return Math.sqrt(arr.variance(array));
 	},
-	
+
 	meanAbsoluteDeviation: function(array) {
 		let mean = arr.mean(array);
 		return arr.mean(array.map(function(num) {
 			return Math.abs(num - mean);
 		}));
 	},
-	
+
 	zScores: function(array) {
 		let mean = arr.mean(array);
 		let standardDeviation = arr.standardDeviation(array);
@@ -141,7 +152,9 @@ let xn_plot_xScale = d3.scaleLinear()
 	// .range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
 	.range([ 0, all_charts_width ]); // the pixel range of the x-axis
 let xn_plot_yScale = d3.scaleLinear()
-	.domain([-radius, radius])
+	// .domain([xmin, xmax]) // looks not as beautiful as w/ fixed_radius
+  .domain([-fixed_radius, fixed_radius])
+
 	// .range([ small_chart_height - margin, margin ]);
 	.range([ small_chart_height, 0 ]);
 
@@ -165,7 +178,8 @@ let yn_plot_xScale = d3.scaleLinear()
 	.domain([0, n]) // the range of the values to plot
 	.range([ margin, all_charts_width - 2*margin ]); // the pixel range of the x-axis
 let yn_plot_yScale = d3.scaleLinear()
-	.domain([-radius, radius])
+	// .domain([ymin, ymax]) // looks not as beautiful as w/ fixed_radius
+	.domain([-fixed_radius, fixed_radius])
 	.range([ small_chart_height - margin, margin ]);
 
 // draw the x axis
@@ -183,11 +197,11 @@ yn_plot.append("g")
 //------------------------------------------------
 // xy_plot
 let xy_plot_xScale = d3.scaleLinear()
-	.domain([-radius, radius]) // the range of the values to plot
+	.domain([xmin, xmax]) // the range of the values to plot
 	// .range([ 2*margin, all_charts_width - 2 *margin]); // the pixel range of the x-axis
 	.range([0, all_charts_width]); // the pixel range of the x-axis
 let xy_plot_yScale = d3.scaleLinear()
-	.domain([-radius, radius])
+	.domain([ymin, ymax])
 	// .range([ all_charts_width - margin, margin ]);
 	.range([ all_charts_width, 0 ]);
 
@@ -234,7 +248,7 @@ for (let i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 		let b = b_scale.invert(j);
 		let x_curr = x_init;
 		let y_curr = y_init;
-		let remoteness = 0; 
+		let remoteness = 0;
 		// let counter = 0;
 		let points = [];
 
@@ -246,22 +260,22 @@ for (let i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 
 			x_curr = 1 - a * Math.pow(x_prev, 2) + y_prev;
 			y_curr = b * x_prev;
-			
+
 			// prevent infinity
-			if (Math.abs(x_curr) < radius && Math.abs(y_curr) < radius) {
+			if (Math.abs(x_curr) < xmax - xmin && Math.abs(y_curr) < ymax - ymin) {
 				points.push((Math.abs(x_curr) + Math.abs(y_curr))/2);
 				// remoteness += Math.abs(x_curr) + Math.abs(y_curr);
-			} else { 
-				// remoteness = 1e6; 
-				// break; 
+			} else {
+				// remoteness = 1e6;
+				// break;
 			}
 			// let dist = Math.sqrt(x_curr*x_curr + y_curr*y_curr);
 			// if (dist < radius) {
 			// 	remoteness += dist;
 			// 	counter++;
-			// } else { 
-			// 	// remoteness = 1e6; 
-			// 	break; 
+			// } else {
+			// 	// remoteness = 1e6;
+			// 	break;
 			// }
 		}
 		let coolness;
@@ -278,7 +292,7 @@ for (let i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
 				badass = coolness;
 			}
 		}
-		else {coolness = 0;} // "fake badass" 
+		else {coolness = 0;} // "fake badass"
 
 
 		heatmap.push(coolness);
@@ -292,9 +306,9 @@ let color = d3.scaleLinear() // for heatmap
 	.range(["#aaaaaa", "#ffffff"]);
 	// .range(["#8b0000", "#FFF0F0"]);
 
-// for (let i = 0; i < (hmap_rect_per_side*hmap_rect_per_side); i++) 
+// for (let i = 0; i < (hmap_rect_per_side*hmap_rect_per_side); i++)
 // {
-//     heatmap[i] = Math.random()*1e6; 
+//     heatmap[i] = Math.random()*1e6;
 // }
 xy_heatmap.selectAll("*").remove(); //without that line old data remains
 xy_heatmap.selectAll("rect") // background heatmap
@@ -316,7 +330,7 @@ function redraw() {
 	let b = document.getElementById("b_slider").value;
 	document.querySelector("#a_out").value = a;
 	document.querySelector("#b_out").value = b;
-	
+
 	// Henon Map
 	for (let i = 0; i < n; i++)
 	{
@@ -324,7 +338,7 @@ function redraw() {
 		let y_curr = b * xdata[xdata.length - 1];
 
 		// prevent infinity
-		if (Math.abs(x_curr) < radius && Math.abs(y_curr) < radius) { 
+		if (Math.abs(x_curr) < xmax - xmin && Math.abs(y_curr) < ymax - ymin) {
 			xdata.push(x_curr);
 			ydata.push(y_curr);
 		}
@@ -359,7 +373,7 @@ function redraw() {
 		.attr("cy", function (d) { return xy_plot_yScale(d); } ) // translate y value to a pixel
 		.attr("r", 1) // radius of circle
 		.style("opacity", 1.0); // opacity of circle
-	
+
 	xy_pointer.selectAll("circle").remove();
 	xy_pointer.append("svg:circle")  // create a new circle for each value
 		.attr("cx", a_scale(a) ) // translate x value
@@ -369,11 +383,10 @@ function redraw() {
 		.attr("class", "pointer");
 }
 
-function mouse_mooved() 
+function mouse_mooved()
 {
 	let mouse_xy = d3.mouse(this);
 	document.getElementById("a_slider").value = a_scale.invert(mouse_xy[0]);
 	document.getElementById("b_slider").value = b_scale.invert(mouse_xy[1]);
 	redraw();
 }
-
