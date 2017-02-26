@@ -4,7 +4,11 @@
 
 ![wiki-formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/87672565712868250e7d2b410307bb1b047f31a7)
 
-Most areas of the map are boring. So there is a map of "coolness" in the background which highlighting some interesting areas. This map was drawn by specific empiric "coolness formula". It can help you to explore the original Henon Map plot.
+// TODO: тут типа про ab-XY-controller в новой версии controlls
+- описать своими словами без википедии и формулы мб почуть поменять (x(n-1), а не x(n+1))
+Most areas of the map are boring. So there is a map of "coolness" in the background. It  highlights some interesting areas and it can help you to explore the original Henon Map plot.
+
+This coolness-map was drawn by empiric "coolness formula". 
 
 ![screenshot](screenshot.png)
 
