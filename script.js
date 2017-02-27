@@ -139,8 +139,8 @@ const redraw = function() {
     dots.enter().append("circle")
         .attr("cx", function(d) { return xy_plot_xScale(d[0]); })
         .attr("cy", function(d) { return xy_plot_yScale(d[1]); })
-        .attr("r", 1.1)
-        .attr("fill", "black")
+        .attr("r", 1.0)
+        .attr("fill", "white")
     // exit (no needed 'cause points array size not changes )
     // dots.exit().remove();
 
@@ -211,6 +211,9 @@ let xn_yn_plot = d3.select(".charts").append("svg")
  //     .attr("height", "100%")
  //     .attr("fill", "pink");
 
+
+
+
 let yn_plot = d3.select(".n_plots").append("svg")
     .attr("class", "yn_plot")
     .attr("width", all_charts_width)
@@ -228,6 +231,18 @@ let xy_plot = d3.select(".ab_xy_plots").append("svg")
     .attr("height", all_charts_width)
     // .on("mousemove", mouse_mooved);
 
+xy_plot.append("rect")
+    .attr("width", all_charts_width)
+    .attr("height", all_charts_width)
+        .style("fill", "purple")
+        .style("pointer-events", "all")
+        .call(d3.zoom()
+            .scaleExtent([1 / 16, 16])
+            .on("zoom", zoomed));
+
+function zoomed() {
+  xy_dots.attr("transform", d3.event.transform);
+}
 // AXES //////////////////////////////////////////
 //------------------------------------------------
 // xn_yn_plot scales and axes
