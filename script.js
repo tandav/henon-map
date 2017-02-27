@@ -104,7 +104,6 @@ let arr = {
     }
 };
 
-
 const henon_map_update = function(a, b, x0, y0, n) {
     hmap[0] = [x0, y0];
     for (let i = 1; i < n; i++)
@@ -152,8 +151,8 @@ const redraw = function() {
 
 const mouse_mooved = function() {
     let mouse_xy = d3.mouse(this);
-    henon_map_update(a_scale.invert(mouse_xy[0]), b_scale.invert(mouse_xy[1]), x0, y0, n)
-    redraw();
+    // henon_map_update(a_scale.invert(mouse_xy[0]), b_scale.invert(mouse_xy[1]), x0, y0, n)
+    // redraw();
 }
 
 let xn_yn_plot = d3.select(".charts").append("svg")
@@ -173,14 +172,7 @@ let xy_plot = d3.select(".ab_xy_plots").append("svg")
     .attr("height", width_unit)
     // .on("mousemove", mouse_mooved);
 
-xy_plot.append("rect")
-    .attr("width", width_unit)
-    .attr("height", width_unit)
-        .style("fill", "purple")
-        .style("pointer-events", "all")
-        .call(d3.zoom()
-            .scaleExtent([1 / 16, 16])
-            .on("zoom", zoomed));
+
 
 function zoomed() {
   xy_dots.attr("transform", d3.event.transform);
@@ -240,13 +232,21 @@ let b_scale = d3.scaleLinear()
     .range([width_unit, 0])
 
 
-let xy_heatmap = ab_plot.append("g");
+let heatmap_pixels = ab_plot.append("g");
 
 let xn_dots = xn_yn_plot.append("g");
 let yn_dots = xn_yn_plot.append("g"); // on one plot
 
 let xy_dots = xy_plot.append("g");
-let xy_pointer = ab_plot.append("g");
+
+xy_plot.append("rect")
+    .attr("width", width_unit)
+    .attr("height", width_unit)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .call(d3.zoom()
+            .scaleExtent([1 / 16, 16])
+            .on("zoom", zoomed));
 
 // DRAW BACKGROUND HEATMAP ///////////////////////////////////////
 let hmap_rect_per_side = 510/6; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
@@ -316,8 +316,7 @@ let color = d3.scaleLinear() // for heatmap
     .domain([0, badass])
     .range(["#aaaaaa", "#ffffff"]);
 
-xy_heatmap.selectAll("*").remove(); //without that line old data remains
-xy_heatmap.selectAll("rect") // background heatmap
+heatmap_pixels.selectAll("rect")
     .data(heatmap)
     .enter()
     .append("rect")
@@ -327,4 +326,56 @@ xy_heatmap.selectAll("rect") // background heatmap
         .attr("height", hmap_rect_size)
         // .attr('opacity', 0.8)
         .attr("fill", color);
+
+let ab_pointer = ab_plot.append("circle")
+        .attr("cx", a_scale((a_min + a_max) / 2))
+        .attr("cy", b_scale((b_min + b_max) / 2))
+        .attr("r", 2.0)
+        .attr("fill", "red");
+
+ab_plot.append("rect")
+    .attr("width", width_unit)
+    .attr("height", width_unit)
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .on("click", clicked)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+function clicked(d, i) {
+    let mouse = d3.mouse(this);
+    ab_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
+    henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
+    redraw();
+  // if (d3.event.defaultPrevented) return; // dragged
+
+  // d3.select(this).transition()
+  //     .style("fill", "black")
+  //     .attr("r", 64)
+  //   .transition()
+  //     .attr("r", 32)
+  //     .style("fill", color(i));
+}
+
+function dragstarted(d) {
+  d3.select(this).raise().classed("active", true);
+}
+
+function dragged(d) {
+    let mouse = d3.mouse(this);
+    // henon_map_update(a_scale.invert(mouse_xy[0]), b_scale.invert(mouse_xy[1]), x0, y0, n)
+
+    // ab_plot.select("circle")
+       ab_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
+           henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
+    redraw();
+  // d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+}
+
+function dragended(d) {
+  d3.select(this).classed("active", false);
+}
+
 //////////////////////////////////////////////////////////////////
