@@ -149,12 +149,6 @@ const redraw = function() {
         .attr("fill", "SpringGreen")
 }
 
-const mouse_mooved = function() {
-    let mouse_xy = d3.mouse(this);
-    // henon_map_update(a_scale.invert(mouse_xy[0]), b_scale.invert(mouse_xy[1]), x0, y0, n)
-    // redraw();
-}
-
 let xn_yn_plot = d3.select(".charts").append("svg")
     .attr("class", "xn_yn_plots")
     .attr("width", width_unit*2)
@@ -164,15 +158,11 @@ let ab_plot = d3.select(".ab_xy_plots").append("svg")
     .attr("class", "ab_plot")
     .attr("width", width_unit)
     .attr("height", width_unit)
-    .on("mousemove", mouse_mooved);
 
 let xy_plot = d3.select(".ab_xy_plots").append("svg")
     .attr("class", "xy_plot")
     .attr("width", width_unit)
     .attr("height", width_unit)
-    // .on("mousemove", mouse_mooved);
-
-
 
 function zoomed() {
   xy_dots.attr("transform", d3.event.transform);
@@ -349,14 +339,6 @@ function clicked(d, i) {
     ab_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
     henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
     redraw();
-  // if (d3.event.defaultPrevented) return; // dragged
-
-  // d3.select(this).transition()
-  //     .style("fill", "black")
-  //     .attr("r", 64)
-  //   .transition()
-  //     .attr("r", 32)
-  //     .style("fill", color(i));
 }
 
 function dragstarted(d) {
@@ -365,13 +347,9 @@ function dragstarted(d) {
 
 function dragged(d) {
     let mouse = d3.mouse(this);
-    // henon_map_update(a_scale.invert(mouse_xy[0]), b_scale.invert(mouse_xy[1]), x0, y0, n)
-
-    // ab_plot.select("circle")
-       ab_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
-           henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
+    ab_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
+    henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
     redraw();
-  // d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
 }
 
 function dragended(d) {
