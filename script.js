@@ -20,7 +20,7 @@ const x0 = 0.1;
 const y0 = 0.8;
 let hmap = new Array(n).fill([0, 0]); // [[x0, y0], [x1, y1], ... [xn, yn]]
 
-let arr = {
+const arr = {
     max: function(array) {
         return Math.max.apply(null, array);
     },
@@ -149,70 +149,14 @@ const redraw = function() {
         .attr("fill", "SpringGreen")
 }
 
-let xn_yn_plot = d3.select(".charts").append("svg")
-    .attr("class", "xn_yn_plots")
-    .attr("width", width_unit*2)
-    .attr("height", width_unit/2)
-
+//--------------------------------------------------------------
+// ab_plot stuff -----------------------------------------------
 let ab_plot = d3.select(".ab_xy_plots").append("svg")
     .attr("class", "ab_plot")
     .attr("width", width_unit)
     .attr("height", width_unit)
 
-let xy_plot = d3.select(".ab_xy_plots").append("svg")
-    .attr("class", "xy_plot")
-    .attr("width", width_unit)
-    .attr("height", width_unit)
-
-function zoomed() {
-  xy_dots.attr("transform", d3.event.transform);
-}
-// AXES //////////////////////////////////////////
-//------------------------------------------------
-// xn_yn_plot scales and axes
-let xn_yn_plot_xScale = d3.scaleLinear()
-    .domain([0, n]) // the range of the values to plot
-    .range([ 0, width_unit*2 ]); // the pixel range of the x-axis
-let xn_yn_plot_yScale = d3.scaleLinear()
-  .domain([-fixed_radius, fixed_radius])
-    .range([ width_unit/2, 0 ]);
-
-// draw the x axis
-let xn_xAxis = d3.axisBottom(xn_yn_plot_xScale)
-xn_yn_plot.append("g")
-    .attr("transform", "translate(0, " + (width_unit/2/2) + ")")
-    .call(xn_xAxis);
-// draw the y axis
-let xn_yAxis = d3.axisRight(xn_yn_plot_yScale)
-xn_yn_plot.append("g")
-    .call(xn_yAxis);
-
-
-//------------------------------------------------
-// xy_plot
-let xy_plot_xScale = d3.scaleLinear()
-    .domain([xmin, xmax]) // the range of the values to plot
-    // .range([ 2*margin, width_unit - 2 *margin]); // the pixel range of the x-axis
-    .range([0, width_unit]); // the pixel range of the x-axis
-let xy_plot_yScale = d3.scaleLinear()
-    .domain([ymin, ymax])
-    // .range([ width_unit - margin, margin ]);
-    .range([ width_unit, 0 ]);
-
-// draw the x axis
-let xy_xAxis = d3.axisBottom(xy_plot_xScale)
-xy_plot.append("g")
-    .attr("transform", "translate(0," + (width_unit/2) + ")")
-    .call(xy_xAxis);
-// draw the y axis
-let xy_yAxis = d3.axisLeft(xy_plot_yScale)
-xy_plot.append("g")
-    .attr("transform", "translate(" + (width_unit/2) + ",0)")
-    .call(xy_yAxis);
-//------------------------------------------------
-//////////////////////////////////////////////////
-
-// scales for a and b
+// scales
 let a_scale = d3.scaleLinear()
     .domain([a_min, a_max])
     .range([0, width_unit])
@@ -221,22 +165,7 @@ let b_scale = d3.scaleLinear()
     .domain([b_min, b_max])
     .range([width_unit, 0])
 
-
 let heatmap_pixels = ab_plot.append("g");
-
-let xn_dots = xn_yn_plot.append("g");
-let yn_dots = xn_yn_plot.append("g"); // on one plot
-
-let xy_dots = xy_plot.append("g");
-
-xy_plot.append("rect")
-    .attr("width", width_unit)
-    .attr("height", width_unit)
-        .style("fill", "none")
-        .style("pointer-events", "all")
-        .call(d3.zoom()
-            .scaleExtent([1 / 16, 16])
-            .on("zoom", zoomed));
 
 // DRAW BACKGROUND HEATMAP ///////////////////////////////////////
 let hmap_rect_per_side = 510/6; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
@@ -318,7 +247,7 @@ heatmap_pixels.selectAll("rect")
         .attr("fill", color);
 
 
-
+// transparent rect for zoom
 ab_plot.append("rect")
     .attr("width", width_unit)
     .attr("height", width_unit)
@@ -338,13 +267,6 @@ let red_pointer = ab_plot.append("circle")
             .on("end", dragended));
 
 
-// function clicked(d, i) { // mb del args
-//     if (d3.event.defaultPrevented) return; // prevent dragging
-//     let mouse = d3.mouse(this);
-//     red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
-//     henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
-//     redraw();
-// }
 
 function dragstarted(d) { // mb del args
   // d3.select(this).raise().classed("active", true);
@@ -361,4 +283,75 @@ function dragended(d) {
   // d3.select(this).classed("active", false);
 }
 
-//////////////////////////////////////////////////////////////////
+
+
+//--------------------------------------------------------------
+// xy_plot stuff -----------------------------------------------
+let xy_plot = d3.select(".ab_xy_plots").append("svg")
+    .attr("class", "xy_plot")
+    .attr("width", width_unit)
+    .attr("height", width_unit)
+
+// scales 
+let xy_plot_xScale = d3.scaleLinear()
+    .domain([xmin, xmax]) // the range of the values to plot
+    // .range([ 2*margin, width_unit - 2 *margin]); // the pixel range of the x-axis
+    .range([0, width_unit]); // the pixel range of the x-axis
+let xy_plot_yScale = d3.scaleLinear()
+    .domain([ymin, ymax])
+    // .range([ width_unit - margin, margin ]);
+    .range([ width_unit, 0 ]);
+
+// axes
+let xy_xAxis = d3.axisBottom(xy_plot_xScale)
+xy_plot.append("g")
+    .attr("transform", "translate(0," + (width_unit/2) + ")")
+    .call(xy_xAxis);
+let xy_yAxis = d3.axisLeft(xy_plot_yScale)
+xy_plot.append("g")
+    .attr("transform", "translate(" + (width_unit/2) + ",0)")
+    .call(xy_yAxis);
+
+let xy_dots = xy_plot.append("g");
+
+// transparent rect for zoom
+xy_plot.append("rect")
+    .attr("width", width_unit)
+    .attr("height", width_unit)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .call(d3.zoom()
+            .scaleExtent([1 / 16, 16])
+            .on("zoom", zoomed));
+
+function zoomed() {
+  xy_dots.attr("transform", d3.event.transform);
+}
+
+//--------------------------------------------------------------
+// xn_yn_plot stuff --------------------------------------------
+let xn_yn_plot = d3.select(".charts").append("svg")
+    .attr("class", "xn_yn_plots")
+    .attr("width", width_unit*2)
+    .attr("height", width_unit/2)
+
+// scales 
+let xn_yn_plot_xScale = d3.scaleLinear()
+    .domain([0, n]) // the range of the values to plot
+    .range([ 0, width_unit*2 ]); // the pixel range of the x-axis
+let xn_yn_plot_yScale = d3.scaleLinear()
+  .domain([-fixed_radius, fixed_radius])
+    .range([ width_unit/2, 0 ]);
+
+// axes
+let xn_yn_xAxis = d3.axisBottom(xn_yn_plot_xScale)
+xn_yn_plot.append("g")
+    .attr("transform", "translate(0, " + (width_unit/2/2) + ")")
+    .call(xn_yn_xAxis);
+let xn_yn_yAxis = d3.axisRight(xn_yn_plot_yScale)
+xn_yn_plot.append("g")
+    .call(xn_yn_yAxis);
+
+let xn_dots = xn_yn_plot.append("g");
+let yn_dots = xn_yn_plot.append("g");
+//--------------------------------------------------------------
