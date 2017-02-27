@@ -1,4 +1,4 @@
-const n = 1005;
+const n = 500;
 const height_unit = 250;
 const margin = 10;
 const width_unit = height_unit*2 + margin;
@@ -110,7 +110,7 @@ const henon_map_update = function(a, b, x0, y0, n) {
     {
         hmap[i] = [1 - a * Math.pow(hmap[i - 1][0], 2) + hmap[i - 1][1], b * hmap[i - 1][0]]
 
-        // preventing infinity
+        // prevent infinity
         if (Math.abs(hmap[i][0]) > 1e6 || Math.abs(hmap[i][1]) > 1e6) { 
             hmap[i] = [0, 0]; 
         }
@@ -317,43 +317,48 @@ heatmap_pixels.selectAll("rect")
         // .attr('opacity', 0.8)
         .attr("fill", color);
 
-let ab_pointer = ab_plot.append("circle")
-        .attr("cx", a_scale((a_min + a_max) / 2))
-        .attr("cy", b_scale((b_min + b_max) / 2))
-        .attr("r", 2.0)
-        .attr("fill", "red");
+
 
 ab_plot.append("rect")
     .attr("width", width_unit)
     .attr("height", width_unit)
     .style("fill", "none")
-    .style("pointer-events", "all")
-    .on("click", clicked)
-    .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
+    // .style("pointer-events", "all")
+    // .on("click", clicked)
 
-function clicked(d, i) {
-    let mouse = d3.mouse(this);
-    ab_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
-    henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
-    redraw();
+let red_pointer = ab_plot.append("circle")
+        .attr("cx", a_scale((a_min + a_max) / 2))
+        .attr("cy", b_scale((b_min + b_max) / 2))
+        .attr("r", 5.0)
+        .attr("fill", "red")
+        // .style("pointer-events", "all")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+
+// function clicked(d, i) { // mb del args
+//     if (d3.event.defaultPrevented) return; // prevent dragging
+//     let mouse = d3.mouse(this);
+//     red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
+//     henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
+//     redraw();
+// }
+
+function dragstarted(d) { // mb del args
+  // d3.select(this).raise().classed("active", true);
 }
 
-function dragstarted(d) {
-  d3.select(this).raise().classed("active", true);
-}
-
-function dragged(d) {
+function dragged(d) { // mb del args
     let mouse = d3.mouse(this);
-    ab_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
+    red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
     henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
     redraw();
 }
 
 function dragended(d) {
-  d3.select(this).classed("active", false);
+  // d3.select(this).classed("active", false);
 }
 
 //////////////////////////////////////////////////////////////////
