@@ -20,10 +20,10 @@
 .xn_yn_plots {
     background-color: #e0e0e0;
 }
-.xn_plot {
+/*.xn_plot {
     background-color: #f4f4f8;
     /*margin-bottom: 5px;*/
-}
+}*/
 
 /*.xn_plot g {
     background-color: #f4f4f8;
@@ -37,7 +37,8 @@
 }
 
 .xy_plot {
-    background-color: #f4f4f8;
+    background-color: purple;
+    /*display: none;*/
     /*margin-left: 10px;*/
 }
 
@@ -56,6 +57,7 @@
 }
 
 h1 {
+    display: none;
     margin-top: 0;
     margin-bottom: .5rem;
     margin-left: auto;
