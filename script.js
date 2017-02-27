@@ -1,17 +1,10 @@
 const n = 1005;
-const small_chart_height = 250;
+const height_unit = 250;
 const margin = 10;
-const all_charts_width = small_chart_height*2 + margin;
+const width_unit = height_unit*2 + margin;
 
-// x and y axes scope
-// problem, when (xmax - xmin != ymax- ymin) image isnt beautiful (сжатое, не квадратное)
-// также .n_plots центрируются относительно нуля. Можно там все время относительно нуля рисовать,
-//
-// типа .domain([-arr.max(a), xmax]) // the range of the values to plot
-// короче, should be equal
 const fixed_radius = 5; // for .n_plots
 const xy_radius = 12.2;
-
 const xmin = -6.2;
 const xmax = xmin + xy_radius;
 const ymin = -6.2;
@@ -23,12 +16,9 @@ const a_max = 0.5;
 const b_min = -0.5;
 const b_max = 2.1;
 
-// const x0 = 0.1;
-// const y0 = 0.2;
 const x0 = 0.1;
 const y0 = 0.8;
 let hmap = new Array(n).fill([0, 0]); // [[x0, y0], [x1, y1], ... [xn, yn]]
-
 
 let arr = {
     max: function(array) {
@@ -117,26 +107,23 @@ let arr = {
 
 const henon_map_update = function(a, b, x0, y0, n) {
     hmap[0] = [x0, y0];
-
     for (let i = 1; i < n; i++)
     {
         hmap[i] = [1 - a * Math.pow(hmap[i - 1][0], 2) + hmap[i - 1][1], b * hmap[i - 1][0]]
-        
+
         // preventing infinity
-        if (Math.abs(hmap[i][0]) > 1e6 || Math.abs(hmap[i][1]) > 1e6) {
-            hmap[i] = [0, 0];
+        if (Math.abs(hmap[i][0]) > 1e6 || Math.abs(hmap[i][1]) > 1e6) { 
+            hmap[i] = [0, 0]; 
         }
     }
 }
 
 const redraw = function() {
     xy_dots.selectAll("circle")
-        // bind and update
-        .data(hmap) 
+        .data(hmap) // bind and update
         .attr("cx", function(d) { return xy_plot_xScale(d[0]); })
         .attr("cy", function(d) { return xy_plot_yScale(d[1]); })
-        // enter
-        .enter().append("circle")
+        .enter().append("circle") // enter section
         .attr("cx", function(d) { return xy_plot_xScale(d[0]); })
         .attr("cy", function(d) { return xy_plot_yScale(d[1]); })
         .attr("r", 1.0)
@@ -149,7 +136,7 @@ const redraw = function() {
         .enter().append("circle")
         .attr("cx", function(d, i) { return xn_yn_plot_xScale(i); })
         .attr("cy", function(d) { return xn_yn_plot_yScale(d[0]); })
-        .attr("r", 1) // radius of circle
+        .attr("r", 1)
         .attr("fill", "purple")
 
     yn_dots.selectAll("circle")
@@ -159,85 +146,36 @@ const redraw = function() {
         .enter().append("circle")
         .attr("cx", function(d, i) { return xn_yn_plot_xScale(i); })
         .attr("cy", function(d) { return xn_yn_plot_yScale(d[1]); })
-        .attr("r", 1) // radius of circle
+        .attr("r", 1)
         .attr("fill", "SpringGreen")
-        // .style("opacity", 1.0); // opacity of circle
-
-    // yn_dots.selectAll("circle") //without that line old data remains
-    //     .data(hmap)  // using the values in the ydata array
-    //     .enter().append("circle")  // create a new circle for each value
-    //     .attr("cx", function (d,i) { return xn_yn_plot_xScale(i); } ) // translate x value
-    //     .attr("cy", function (d) { return xn_yn_plot_yScale(d); } ) // translate y value to a pixel
-    //     .attr("r", 1) // radius of circle
-    //     .attr("fill", "SpringGreen")
-        // .style("opacity", 1.0); // opacity of circle
-
-
-    // let updateSelection = xy_dots.data(multiples);
-    // updateSelection.enter().append("circle")
-    //  .attr
-    // xy_dots.selectAll("circle")
-    //  .remove() //without that line old data remains
-    // // xy_dots.selectAll("scatter-dots")
-    //  .data(ydata)  // using the values in the ydata array
-    //  .attr("cx", function (d,i) { return xy_plot_xScale(xdata[i]); } ) // translate x value
-    //  .attr("cy", function (d) { return xy_plot_yScale(d); } ) // translate y value to a pixel
-    //  .enter().append("svg:circle")  // create a new circle for each value
-    //  .attr("cx", function (d,i) { return xy_plot_xScale(xdata[i]); } ) // translate x value
-    //  .attr("cy", function (d) { return xy_plot_yScale(d); } ) // translate y value to a pixel
-    //  .attr("r", 1) // radius of circle
-    //  .style("opacity", 1.0); // opacity of circle
-
-    // xy_pointer.selectAll("circle").remove();
-    // xy_pointer.append("circle")  // create a new circle for each value
-    //     .attr("class", "pointer")
-    //     .attr("cx", a_scale(a) ) // translate x value
-    //     .attr("cy", b_scale(b) ) // translate y value to a pixel
-    //     .attr("r", 3) // radius of circle
-    //     .attr("fill", "red")
-    //     .style("opacity", 1.0) // opacity of circle
 }
 
 const mouse_mooved = function() {
     let mouse_xy = d3.mouse(this);
     henon_map_update(a_scale.invert(mouse_xy[0]), b_scale.invert(mouse_xy[1]), x0, y0, n)
-    // redraw(a_scale.invert(mouse_xy[0]), b_scale.invert(mouse_xy[1]));
     redraw();
 }
 
 let xn_yn_plot = d3.select(".charts").append("svg")
     .attr("class", "xn_yn_plots")
-    .attr("width", all_charts_width*2)
-    // .attr("height", small_chart_height)
-    .attr("height", all_charts_width/2)
-    // .append("rect") // like a bg-color
- //     .attr("width", "100%")
- //     .attr("height", "100%")
- //     .attr("fill", "pink");
-
-
-
-
-// let yn_plot = d3.select(".n_plots").append("svg")
-//     .attr("class", "yn_plot")
-//     .attr("width", all_charts_width)
-//     .attr("height", small_chart_height)
+    .attr("width", width_unit*2)
+    .attr("height", width_unit/2)
 
 let ab_plot = d3.select(".ab_xy_plots").append("svg")
     .attr("class", "ab_plot")
-    .attr("width", all_charts_width)
-    .attr("height", all_charts_width)
+    .attr("width", width_unit)
+    .attr("height", width_unit)
     .on("mousemove", mouse_mooved);
 
 let xy_plot = d3.select(".ab_xy_plots").append("svg")
     .attr("class", "xy_plot")
-    .attr("width", all_charts_width)
-    .attr("height", all_charts_width)
+    .attr("width", width_unit)
+    .attr("height", width_unit)
     // .on("mousemove", mouse_mooved);
 
 xy_plot.append("rect")
-    .attr("width", all_charts_width)
-    .attr("height", all_charts_width)
+    .attr("width", width_unit)
+    .attr("height", width_unit)
         .style("fill", "purple")
         .style("pointer-events", "all")
         .call(d3.zoom()
@@ -252,15 +190,15 @@ function zoomed() {
 // xn_yn_plot scales and axes
 let xn_yn_plot_xScale = d3.scaleLinear()
     .domain([0, n]) // the range of the values to plot
-    .range([ 0, all_charts_width*2 ]); // the pixel range of the x-axis
+    .range([ 0, width_unit*2 ]); // the pixel range of the x-axis
 let xn_yn_plot_yScale = d3.scaleLinear()
   .domain([-fixed_radius, fixed_radius])
-    .range([ all_charts_width/2, 0 ]);
+    .range([ width_unit/2, 0 ]);
 
 // draw the x axis
 let xn_xAxis = d3.axisBottom(xn_yn_plot_xScale)
 xn_yn_plot.append("g")
-    .attr("transform", "translate(0, " + (all_charts_width/2/2) + ")")
+    .attr("transform", "translate(0, " + (width_unit/2/2) + ")")
     .call(xn_xAxis);
 // draw the y axis
 let xn_yAxis = d3.axisRight(xn_yn_plot_yScale)
@@ -272,22 +210,22 @@ xn_yn_plot.append("g")
 // xy_plot
 let xy_plot_xScale = d3.scaleLinear()
     .domain([xmin, xmax]) // the range of the values to plot
-    // .range([ 2*margin, all_charts_width - 2 *margin]); // the pixel range of the x-axis
-    .range([0, all_charts_width]); // the pixel range of the x-axis
+    // .range([ 2*margin, width_unit - 2 *margin]); // the pixel range of the x-axis
+    .range([0, width_unit]); // the pixel range of the x-axis
 let xy_plot_yScale = d3.scaleLinear()
     .domain([ymin, ymax])
-    // .range([ all_charts_width - margin, margin ]);
-    .range([ all_charts_width, 0 ]);
+    // .range([ width_unit - margin, margin ]);
+    .range([ width_unit, 0 ]);
 
 // draw the x axis
 let xy_xAxis = d3.axisBottom(xy_plot_xScale)
 xy_plot.append("g")
-    .attr("transform", "translate(0," + (all_charts_width/2) + ")")
+    .attr("transform", "translate(0," + (width_unit/2) + ")")
     .call(xy_xAxis);
 // draw the y axis
 let xy_yAxis = d3.axisLeft(xy_plot_yScale)
 xy_plot.append("g")
-    .attr("transform", "translate(" + (all_charts_width/2) + ",0)")
+    .attr("transform", "translate(" + (width_unit/2) + ",0)")
     .call(xy_yAxis);
 //------------------------------------------------
 //////////////////////////////////////////////////
@@ -295,11 +233,11 @@ xy_plot.append("g")
 // scales for a and b
 let a_scale = d3.scaleLinear()
     .domain([a_min, a_max])
-    .range([0, all_charts_width])
+    .range([0, width_unit])
 
 let b_scale = d3.scaleLinear()
     .domain([b_min, b_max])
-    .range([all_charts_width, 0])
+    .range([width_unit, 0])
 
 
 let xy_heatmap = ab_plot.append("g");
@@ -313,13 +251,13 @@ let xy_pointer = ab_plot.append("g");
 // DRAW BACKGROUND HEATMAP ///////////////////////////////////////
 let hmap_rect_per_side = 510/6; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
 // let hmap_rect_per_side = 510/3; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
-let hmap_rect_size = Math.floor(all_charts_width / hmap_rect_per_side);
+let hmap_rect_size = Math.floor(width_unit / hmap_rect_per_side);
 // let heatmap  = [12, 20];
 let heatmap  = [];
 let badass = 0;
 // calculating remoteness of all points caused by (a, b) (we take those (a, b) values that corresponds to the centers of each heatmap rect)
-for (let i = hmap_rect_size/2; i < all_charts_width; i += hmap_rect_size) {
-    for (let j = hmap_rect_size/2; j < all_charts_width; j += hmap_rect_size) {
+for (let i = hmap_rect_size/2; i < width_unit; i += hmap_rect_size) {
+    for (let j = hmap_rect_size/2; j < width_unit; j += hmap_rect_size) {
         let a = a_scale.invert(i);
         let b = b_scale.invert(j);
         let x_curr = x0;
