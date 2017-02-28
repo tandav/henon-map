@@ -1,4 +1,4 @@
-const n = 500;
+const n = 800;
 const height_unit = 250;
 const margin = 10;
 const width_unit = height_unit*2 + margin;
@@ -125,7 +125,7 @@ const redraw = function() {
         .enter().append("circle") // enter section
         .attr("cx", function(d) { return xy_plot_xScale(d[0]); })
         .attr("cy", function(d) { return xy_plot_yScale(d[1]); })
-        .attr("r", 1.0)
+        .attr("r", 2.0)
         .attr("fill", "white")
 
     xn_dots.selectAll("circle")
@@ -165,9 +165,9 @@ let b_scale = d3.scaleLinear()
     .domain([b_min, b_max])
     .range([width_unit, 0])
 
-let heatmap_pixels = ab_plot.append("g");
 
 // DRAW BACKGROUND HEATMAP ///////////////////////////////////////
+let heatmap_pixels = ab_plot.append("g");
 let hmap_rect_per_side = 510/6; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
 // let hmap_rect_per_side = 510/3; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
 let hmap_rect_size = Math.floor(width_unit / hmap_rect_per_side);
@@ -255,10 +255,12 @@ ab_plot.append("rect")
     // .style("pointer-events", "all")
     // .on("click", clicked)
 
+// let ab_g = ab_plot.append("g");
+
 let red_pointer = ab_plot.append("circle")
         .attr("cx", a_scale((a_min + a_max) / 2))
         .attr("cy", b_scale((b_min + b_max) / 2))
-        .attr("r", 5.0)
+        .attr("r", 2.0)
         .attr("fill", "red")
         // .style("pointer-events", "all")
         .call(d3.drag()
@@ -267,6 +269,13 @@ let red_pointer = ab_plot.append("circle")
             .on("end", dragended));
 
 
+ab_plot.call(d3.zoom()
+    .scaleExtent([1 / 2, 64])
+    .on("zoom", zoomed_ab));
+function zoomed_ab() {
+  heatmap_pixels.attr("transform", d3.event.transform);
+  red_pointer.attr("transform", d3.event.transform);
+}
 
 function dragstarted(d) { // mb del args
   // d3.select(this).raise().classed("active", true);
@@ -274,6 +283,7 @@ function dragstarted(d) { // mb del args
 
 function dragged(d) { // mb del args
     let mouse = d3.mouse(this);
+    console.log(mouse[0], mouse[1]);
     red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
     henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
     redraw();
