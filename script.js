@@ -311,16 +311,26 @@ function zoomed_ab() {
   gB.call(ab_bAxis.scale(d3.event.transform.rescaleY(b_scale)));
 }
 
+let dragging = true;
+
+d3.select("body")
+    .on("keydown", function() {
+    dragging = !dragging;
+})
+
 function mouse_mooved() 
 {
-    let mouse = d3.mouse(this);
-    let mouse_unzoomed = d3.mouse(d3.select(".ab_plot").node());
-    console.log(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]));
-    // red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
-    red_pointer.attr("cx", mouse_unzoomed[0]).attr("cy", mouse_unzoomed[1]);
-    // red_pointer.attr("cx", d3.event.pageX).attr("cy", d3.event.pageY);
-    henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n);
-    redraw();
+    if (dragging) {
+        let mouse = d3.mouse(this);
+        let mouse_unzoomed = d3.mouse(d3.select(".ab_plot").node());
+        console.log(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]));
+        // red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
+        red_pointer.attr("cx", mouse_unzoomed[0]).attr("cy", mouse_unzoomed[1]);
+        // red_pointer.attr("cx", d3.event.pageX).attr("cy", d3.event.pageY);
+        henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n);
+        redraw();
+    }
+
 }
 
 
