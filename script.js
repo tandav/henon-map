@@ -187,13 +187,7 @@ let ab_bAxis = d3.axisRight(b_scale)
 //     // .style("pointer-events", "all")
 //     // .on("click", clicked)
 
-var gA = ab_plot.append("g")
-    .attr("class", "axis axis--x")
-    .call(ab_aAxis);
 
-var gB = ab_plot.append("g")
-    .attr("class", "axis axis--y")
-    .call(ab_bAxis);
 
 
 
@@ -278,6 +272,13 @@ heatmap_pixels.selectAll("rect")
         .attr("fill", color)
     .on("mousemove", mouse_mooved);
 
+var gA = ab_plot.append("g")
+    .attr("class", "axis axis--x")
+    .call(ab_aAxis);
+
+var gB = ab_plot.append("g")
+    .attr("class", "axis axis--y")
+    .call(ab_bAxis);
 
 
 
