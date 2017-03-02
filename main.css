@@ -18,6 +18,7 @@
 }
 
 .xn_yn_plots {
+    display: none;
     background-color: #e0e0e0;
 }
 /*.xn_plot {
