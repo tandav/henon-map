@@ -178,14 +178,14 @@ let ab_bAxis = d3.axisRight(b_scale)
     // .tickPadding(width_unit);
 
 
-// transparent rect for zoom
-let view = ab_plot.append("rect")
-    .attr("width", width_unit)
-    .attr("height", width_unit)
-    // .style("fill", "none")
-    .on("mousemove", mouse_mooved);
-    // .style("pointer-events", "all")
-    // .on("click", clicked)
+// // transparent rect for zoom
+// let view = ab_plot.append("rect")
+//     .attr("width", width_unit)
+//     .attr("height", width_unit)
+//     // .style("fill", "none")
+//     .on("mousemove", mouse_mooved);
+//     // .style("pointer-events", "all")
+//     // .on("click", clicked)
 
 var gA = ab_plot.append("g")
     .attr("class", "axis axis--x")
@@ -198,84 +198,86 @@ var gB = ab_plot.append("g")
 
 
 // DRAW BACKGROUND HEATMAP ///////////////////////////////////////
-// let heatmap_pixels = ab_plot.append("g");
-// let hmap_rect_per_side = 510/6; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
-// // let hmap_rect_per_side = 510/3; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
-// let hmap_rect_size = Math.floor(width_unit / hmap_rect_per_side);
-// // let heatmap  = [12, 20];
-// let heatmap  = [];
-// let badass = 0;
-// // calculating remoteness of all points caused by (a, b) (we take those (a, b) values that corresponds to the centers of each heatmap rect)
-// for (let i = hmap_rect_size/2; i < width_unit; i += hmap_rect_size) {
-//     for (let j = hmap_rect_size/2; j < width_unit; j += hmap_rect_size) {
-//         let a = a_scale.invert(i);
-//         let b = b_scale.invert(j);
-//         let x_curr = x0;
-//         let y_curr = y0;
-//         let remoteness = 0;
-//         // let counter = 0;
-//         let points = [];
+let heatmap_pixels = ab_plot.append("g");
+let hmap_rect_per_side = 510/6; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
+// let hmap_rect_per_side = 510/3; // how many small rects per xy_plot side in background/ better - divisors of 510,only then axes will be in the middle of svg
+let hmap_rect_size = Math.floor(width_unit / hmap_rect_per_side);
+// let heatmap  = [12, 20];
+let heatmap  = [];
+let badass = 0;
+// calculating remoteness of all points caused by (a, b) (we take those (a, b) values that corresponds to the centers of each heatmap rect)
+for (let i = hmap_rect_size/2; i < width_unit; i += hmap_rect_size) {
+    for (let j = hmap_rect_size/2; j < width_unit; j += hmap_rect_size) {
+        let a = a_scale.invert(i);
+        let b = b_scale.invert(j);
+        let x_curr = x0;
+        let y_curr = y0;
+        let remoteness = 0;
+        // let counter = 0;
+        let points = [];
 
-//         // Henon Map
-//         for (let k = 0; k < n; k++)
-//         {
-//             let x_prev = x_curr;
-//             let y_prev = y_curr;
+        // Henon Map
+        for (let k = 0; k < n; k++)
+        {
+            let x_prev = x_curr;
+            let y_prev = y_curr;
 
-//             x_curr = 1 - a * Math.pow(x_prev, 2) + y_prev;
-//             y_curr = b * x_prev;
+            x_curr = 1 - a * Math.pow(x_prev, 2) + y_prev;
+            y_curr = b * x_prev;
 
-//             // prevent infinity
-//             if (Math.abs(x_curr) < xy_radius && Math.abs(y_curr) < xy_radius) {
-//                 points.push((Math.abs(x_curr) + Math.abs(y_curr))/2);
-//                 // remoteness += Math.abs(x_curr) + Math.abs(y_curr);
-//             } else {
-//                 // remoteness = 1e6;
-//                 // break;
-//             }
-//             // let dist = Math.sqrt(x_curr*x_curr + y_curr*y_curr);
-//             // if (dist < radius) {
-//             //  remoteness += dist;
-//             //  counter++;
-//             // } else {
-//             //  // remoteness = 1e6;
-//             //  break;
-//             // }
-//         }
-//         let coolness;
+            // prevent infinity
+            if (Math.abs(x_curr) < xy_radius && Math.abs(y_curr) < xy_radius) {
+                points.push((Math.abs(x_curr) + Math.abs(y_curr))/2);
+                // remoteness += Math.abs(x_curr) + Math.abs(y_curr);
+            } else {
+                // remoteness = 1e6;
+                // break;
+            }
+            // let dist = Math.sqrt(x_curr*x_curr + y_curr*y_curr);
+            // if (dist < radius) {
+            //  remoteness += dist;
+            //  counter++;
+            // } else {
+            //  // remoteness = 1e6;
+            //  break;
+            // }
+        }
+        let coolness;
 
 
-//         // coolness = Math.exp(points.length * Math.abs(arr.max(points) - arr.min(points)));
-//         // if (coolness > badass) {
-//         //  badass = coolness;
-//         // }
+        // coolness = Math.exp(points.length * Math.abs(arr.max(points) - arr.min(points)));
+        // if (coolness > badass) {
+        //  badass = coolness;
+        // }
 
-//         if (points.length > 200 && Math.abs(arr.max(points) - arr.min(points)) > 0.8) { // filter too small
-//             coolness = points.length * Math.abs(arr.max(points) - arr.min(points)); // only "long and tail" .n_plots
-//             if (coolness > badass) {
-//                 badass = coolness;
-//             }
-//         }
-//         else {coolness = 0;} // "fake badass"
-//         heatmap.push(coolness);
-//     }
-// }
+        if (points.length > 200 && Math.abs(arr.max(points) - arr.min(points)) > 0.8) { // filter too small
+            coolness = points.length * Math.abs(arr.max(points) - arr.min(points)); // only "long and tail" .n_plots
+            if (coolness > badass) {
+                badass = coolness;
+            }
+        }
+        else {coolness = 0;} // "fake badass"
+        heatmap.push(coolness);
+    }
+}
 
-// console.log("badass: ", badass);
-// let color = d3.scaleLinear() // for heatmap
-//     .domain([0, badass])
-//     .range(["#aaaaaa", "#ffffff"]);
+console.log("badass: ", badass);
+let color = d3.scaleLinear() // for heatmap
+    .domain([0, badass])
+    .range(["#aaaaaa", "#ffffff"]);
 
-// heatmap_pixels.selectAll("rect")
-//     .data(heatmap)
-//     .enter()
-//     .append("rect")
-//         .attr("x", function(d,i) { return Math.floor(i / hmap_rect_per_side) * hmap_rect_size; })
-//         .attr("y", function(d,i) { return i % hmap_rect_per_side * hmap_rect_size; })
-//         .attr("width", hmap_rect_size)
-//         .attr("height", hmap_rect_size)
-//         // .attr('opacity', 0.8)
-//         .attr("fill", color);
+heatmap_pixels.selectAll("rect")
+    .data(heatmap)
+    .enter()
+    .append("rect")
+        .attr("x", function(d,i) { return Math.floor(i / hmap_rect_per_side) * hmap_rect_size; })
+        .attr("y", function(d,i) { return i % hmap_rect_per_side * hmap_rect_size; })
+        .attr("width", hmap_rect_size)
+        .attr("height", hmap_rect_size)
+        // .attr('opacity', 0.8)
+        .attr("fill", color)
+    .on("mousemove", mouse_mooved);
+
 
 
 
@@ -294,13 +296,16 @@ let red_pointer = ab_plot.append("circle")
 
 
 ab_plot.call(d3.zoom()
-    .scaleExtent([1, 64])
+    .scaleExtent([1, 512])
+    // .translateExtent([[-10, -10], [width_unit + 10, width_unit + 10]]) // pan bounds
+    .translateExtent([[0, 0], [width_unit, width_unit]]) // pan bounds
     .on("zoom", zoomed_ab));
 
 function zoomed_ab() {
   // heatmap_pixels.attr("transform", d3.event.transform);
   // red_pointer.attr("transform", d3.event.transform);
-  view.attr("transform", d3.event.transform);
+  // view.attr("transform", d3.event.transform);
+  heatmap_pixels.attr("transform", d3.event.transform);
   gA.call(ab_aAxis.scale(d3.event.transform.rescaleX(a_scale)));
   gB.call(ab_bAxis.scale(d3.event.transform.rescaleY(b_scale)));
 }
