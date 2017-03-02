@@ -1,27 +1,46 @@
 .charts {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.n_plots {
-    display: flex;
     flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
 
-.xn_plot {
+.ab_xy_plots {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+
+
+.ab_plot {
+    /*background-color: SpringGreen;*/
+}
+
+.xn_yn_plots {
+    display: none;
+    background-color: #e0e0e0;
+}
+/*.xn_plot {
+    background-color: #f4f4f8;
+    /*margin-bottom: 5px;*/
+}*/
+
+/*.xn_plot g {
     background-color: #f4f4f8;
     margin-bottom: 5px;
-}
+}*/
 
 .yn_plot {
+    display: none;
     background-color: #f4f4f8;
     margin-top: 5px; /*need better margins*/
 }
 
 .xy_plot {
-    background-color: #f4f4f8;
-    margin-left: 10px;
+    background-color: purple;
+    /*display: none;*/
+    /*margin-left: 10px;*/
 }
 
 .header {
@@ -31,7 +50,6 @@
 }
 
 .charts text {
-    /*font: 20px -apple-system;  */
 	font-size: 1em;
     font-family: -apple-system, BlinkMacSystemFont,
     "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
@@ -59,29 +77,22 @@ h1 {
     fill: none;
 }
 
+
+
 circle {
-    fill: black;
+    /*fill: black;*/
     /*fill: SeaGreen;*/
     /*fill: SpringGreen ;*/
 }
 
-label {
+/*label {
 	font-size: 1em;
 	font-family: -apple-system, BlinkMacSystemFont,
     "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
     "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-}
+}*/
 
-.pointer {
-    fill: red;
-
-}
-
-input[type=range] {
-  width: 100%;
-  /*margin-bottom: 10px;*/
-}
 
 body text {
     font-size: 2em;
