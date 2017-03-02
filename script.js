@@ -323,23 +323,6 @@ function mouse_mooved()
     redraw();
 }
 
-// function dragstarted(d) { // mb del args
-//   // d3.select(this).raise().classed("active", true);
-// }
-
-// function dragged(d) { // mb del args
-//     let mouse = d3.mouse(this);
-//     console.log(mouse[0], mouse[1]);
-//     red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
-//     henon_map_update(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n)
-//     redraw();
-// }
-
-// function dragended(d) {
-//   // d3.select(this).classed("active", false);
-// }
-
-
 
 //--------------------------------------------------------------
 // xy_plot stuff -----------------------------------------------
@@ -360,12 +343,12 @@ let xy_plot_yScale = d3.scaleLinear()
 
 // axes
 let xy_xAxis = d3.axisBottom(xy_plot_xScale)
-xy_plot.append("g")
-    .attr("transform", "translate(0," + (width_unit/2) + ")")
+let gX = xy_plot.append("g")
+    // .attr("transform", "translate(0," + (width_unit/2) + ")")
     .call(xy_xAxis);
-let xy_yAxis = d3.axisLeft(xy_plot_yScale)
-xy_plot.append("g")
-    .attr("transform", "translate(" + (width_unit/2) + ",0)")
+let xy_yAxis = d3.axisRight(xy_plot_yScale)
+let gY = xy_plot.append("g")
+    // .attr("transform", "translate(" + (width_unit/2) + ",0)")
     .call(xy_yAxis);
 
 let xy_dots = xy_plot.append("g");
@@ -378,10 +361,14 @@ xy_plot.append("rect")
         .style("pointer-events", "all")
         .call(d3.zoom()
             .scaleExtent([1 / 16, 16])
-            .on("zoom", zoomed));
+            .on("zoom", zoomed_xy));
 
-function zoomed() {
-  xy_dots.attr("transform", d3.event.transform);
+function zoomed_xy() {
+    xy_dots.attr("transform", d3.event.transform);
+    // gX.attr("transform", d3.event.transform);
+    // gY.attr("transform", d3.event.transform);
+    gX.call(xy_xAxis.scale(d3.event.transform.rescaleX(xy_plot_xScale)));
+    gY.call(xy_yAxis.scale(d3.event.transform.rescaleY(xy_plot_yScale)));
 }
 
 //--------------------------------------------------------------
