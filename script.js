@@ -11,10 +11,11 @@ const ymin = -6.2;
 const ymax = ymin + xy_radius;
 
 // a, b scope
-const a_min = -0.43;
+const a_min = -0.5;
 const a_max = 0.5;
-const b_min = -0.5;
-const b_max = 2.1;
+
+const b_min = -1.1;
+const b_max = 1.1;
 
 const x0 = 0.1;
 const y0 = 0.8;
@@ -209,6 +210,7 @@ for (let i = hmap_rect_size/2; i < width_unit; i += hmap_rect_size) {
         let remoteness = 0;
         // let counter = 0;
         let points = [];
+        let coolness = 0;
 
         // Henon Map
         for (let k = 0; k < n; k++)
@@ -219,14 +221,23 @@ for (let i = hmap_rect_size/2; i < width_unit; i += hmap_rect_size) {
             x_curr = 1 - a * Math.pow(x_prev, 2) + y_prev;
             y_curr = b * x_prev;
 
-            // prevent infinity
-            if (Math.abs(x_curr) < xy_radius && Math.abs(y_curr) < xy_radius) {
-                points.push((Math.abs(x_curr) + Math.abs(y_curr))/2);
-                // remoteness += Math.abs(x_curr) + Math.abs(y_curr);
-            } else {
-                // remoteness = 1e6;
-                // break;
+            // if (k === n/4 || k === n/2 || k === 3/4 * n || k === n - 1)
+            if (k % (n/16) == 0)
+            // if (k === n - 1)
+            {
+                coolness += Math.sqrt(x_curr * x_curr + y_curr * y_curr);
+                if (coolness > 5) {coolness = 1}
+                // console.log(coolness);
+                if (coolness > badass) { badass = coolness;}
             }
+            // // prevent infinity
+            // if (Math.abs(x_curr) < xy_radius && Math.abs(y_curr) < xy_radius) {
+            //     points.push((Math.abs(x_curr) + Math.abs(y_curr))/2);
+            //     // remoteness += Math.abs(x_curr) + Math.abs(y_curr);
+            // } else {
+            //     // remoteness = 1e6;
+            //     // break;
+            // }
             // let dist = Math.sqrt(x_curr*x_curr + y_curr*y_curr);
             // if (dist < radius) {
             //  remoteness += dist;
@@ -235,8 +246,8 @@ for (let i = hmap_rect_size/2; i < width_unit; i += hmap_rect_size) {
             //  // remoteness = 1e6;
             //  break;
             // }
+
         }
-        let coolness;
 
 
         // coolness = Math.exp(points.length * Math.abs(arr.max(points) - arr.min(points)));
@@ -244,13 +255,13 @@ for (let i = hmap_rect_size/2; i < width_unit; i += hmap_rect_size) {
         //  badass = coolness;
         // }
 
-        if (points.length > 200 && Math.abs(arr.max(points) - arr.min(points)) > 0.8) { // filter too small
-            coolness = points.length * Math.abs(arr.max(points) - arr.min(points)); // only "long and tail" .n_plots
-            if (coolness > badass) {
-                badass = coolness;
-            }
-        }
-        else {coolness = 0;} // "fake badass"
+        // if (points.length > 200 && Math.abs(arr.max(points) - arr.min(points)) > 0.8) { // filter too small
+        //     coolness = points.length * Math.abs(arr.max(points) - arr.min(points)); // only "long and tail" .n_plots
+        //     if (coolness > badass) {
+        //         badass = coolness;
+        //     }
+        // }
+        // else {coolness = 0;} // "fake badass"
         heatmap.push(coolness);
     }
 }
@@ -323,7 +334,6 @@ function mouse_mooved()
     if (dragging) {
         let mouse = d3.mouse(this);
         let mouse_unzoomed = d3.mouse(d3.select(".ab_plot").node());
-        console.log(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]));
         // red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
         red_pointer.attr("cx", mouse_unzoomed[0]).attr("cy", mouse_unzoomed[1]);
         // red_pointer.attr("cx", d3.event.pageX).attr("cy", d3.event.pageY);
