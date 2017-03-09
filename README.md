@@ -1,4 +1,4 @@
-# Henon-Map
+# Henon Map
 [Wikipedia:](https://en.wikipedia.org/wiki/H%C3%A9non_map)
 >The **Hénon map** is a discrete-time dynamical system. It is one of the most studied examples of dynamical systems that exhibit chaotic behavior. The Hénon map takes a point (xn, yn) in the plane and maps it to a new point.
 
