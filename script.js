@@ -269,7 +269,8 @@ for (let i = hmap_rect_size/2; i < width_unit; i += hmap_rect_size) {
 console.log("badass: ", badass);
 let color = d3.scaleLinear() // for heatmap
     .domain([0, badass])
-    .range(["#aaaaaa", "#ffffff"]);
+    .range(["#ffffff", "#190019"]);
+    // .range(["#190019", "#ffffff"]);
 
 heatmap_pixels.selectAll("rect")
     .data(heatmap)
