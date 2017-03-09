@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="500" height="500"></canvas>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+const n = 5000;
+// a, b scope
+const a_min = -0.5;
+const a_max = 0.5;
+
+const b_min = -1.1;
+const b_max = 1.1;
+
+const x0 = 0.1;
+const y0 = 0.8;
+
+const fixed_radius = 5; // for .n_plots
+const xy_radius = 12.2;
+const xmin = -6.2;
+const xmax = xmin + xy_radius;
+const ymin = -6.2;
+const ymax = ymin + xy_radius;
+
+
+var canvas = d3.select("canvas"),
+    context = canvas.node().getContext("2d"),
+    width = canvas.property("width"),
+    height = canvas.property("height"),
+    radius = 0.5;
+
+// var points = d3.range(2000).map(phyllotaxis(10));
+var points = henon_map(0.285, 0.999, x0, y0, n);
+
+// scales
+let a_scale = d3.scaleLinear()
+    .domain([a_min, a_max])
+    .range([0, width])
+
+let b_scale = d3.scaleLinear()
+    .domain([b_min, b_max])
+    .range([width, 0])
+
+// scales 
+let xy_plot_xScale = d3.scaleLinear()
+    .domain([xmin, xmax]) // the range of the values to plot
+    // .range([ 2*margin, width_unit - 2 *margin]); // the pixel range of the x-axis
+    .range([0, width]); // the pixel range of the x-axis
+let xy_plot_yScale = d3.scaleLinear()
+    .domain([ymin, ymax])
+    // .range([ width_unit - margin, margin ]);
+    .range([ width, 0 ]);
+
+canvas.call(d3.zoom()
+    .scaleExtent([1 / 32, 4])
+    .on("zoom", zoomed));
+
+drawPoints();
+
+function zoomed() {
+  context.save();
+  context.clearRect(0, 0, width, height);
+  context.translate(d3.event.transform.x, d3.event.transform.y);
+  context.scale(d3.event.transform.k, d3.event.transform.k);
+  drawPoints();
+  context.restore();
+}
+
+function drawPoints() {
+  context.beginPath();
+  points.forEach(drawPoint);
+  context.fill();
+}
+
+function drawPoint(point) {
+  context.moveTo(xy_plot_xScale(point[0]) + radius, xy_plot_yScale(point[1]));
+  context.arc(xy_plot_xScale(point[0]), xy_plot_yScale(point[1]), radius, 0, 2 * Math.PI);
+}
+
+function phyllotaxis(radius) {
+  var theta = Math.PI * (3 - Math.sqrt(5));
+  return function(i) {
+    var r = radius * Math.sqrt(i), a = theta * i;
+    return [
+      width / 2 + r * Math.cos(a),
+      height / 2 + r * Math.sin(a)
+    ];
+  };
+}
+
+function henon_map(a, b, x0, y0, n) {
+    let hmap = new Array(n).fill([0, 0]); // [[x0, y0], [x1, y1], ... [xn, yn]]
+    hmap[0] = [x0, y0];
+    for (let i = 1; i < n; i++)
+    {
+        hmap[i] = [1 - a * Math.pow(hmap[i - 1][0], 2) + hmap[i - 1][1], b * hmap[i - 1][0]]
+
+        // prevent infinity
+        if (Math.abs(hmap[i][0]) > 1e6 || Math.abs(hmap[i][1]) > 1e6) { 
+            hmap[i] = [0, 0]; 
+        }
+    }
+    return hmap;
+}
+
+
+</script>
+<style>
+canvas {
+	background-color: #eaf2ff;
+}
+</style>
