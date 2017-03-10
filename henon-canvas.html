@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<svg width="500" height="500"></svg>
 <canvas width="500" height="500"></canvas>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
@@ -27,10 +28,11 @@ var canvas = d3.select("canvas"),
     context = canvas.node().getContext("2d"),
     width = canvas.property("width"),
     height = canvas.property("height"),
-    radius = 0.5;
+    radius = 1.;
 
 // var points = d3.range(2000).map(phyllotaxis(10));
-var points = henon_map(0.285, 0.999, x0, y0, n);
+// var points = henon_map(0.285, 0.999, x0, y0, n);
+let hmap = new Array(n).fill([0, 0]); // [[x0, y0], [x1, y1], ... [xn, yn]]
 
 // scales
 let a_scale = d3.scaleLinear()
@@ -68,7 +70,7 @@ function zoomed() {
 
 function drawPoints() {
   context.beginPath();
-  points.forEach(drawPoint);
+  hmap.forEach(drawPoint);
   context.fill();
 }
 
@@ -89,7 +91,6 @@ function phyllotaxis(radius) {
 }
 
 function henon_map(a, b, x0, y0, n) {
-    let hmap = new Array(n).fill([0, 0]); // [[x0, y0], [x1, y1], ... [xn, yn]]
     hmap[0] = [x0, y0];
     for (let i = 1; i < n; i++)
     {
@@ -100,13 +101,37 @@ function henon_map(a, b, x0, y0, n) {
             hmap[i] = [0, 0]; 
         }
     }
-    return hmap;
+
+    // points = hmap;
+    // return hmap;
+}
+
+d3.select('svg')
+  .on("mousemove", mouse_mooved);
+
+function mouse_mooved() 
+{
+  let mouse = d3.mouse(this);
+  let mouse_unzoomed = d3.mouse(d3.select("svg").node());
+  // red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
+  // red_pointer.attr("cx", mouse_unzoomed[0]).attr("cy", mouse_unzoomed[1]);
+  // red_pointer.attr("cx", d3.event.pageX).attr("cy", d3.event.pageY);
+  henon_map(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n);
+
+  context.save();
+  context.clearRect(0, 0, width, height);
+  drawPoints();
+  context.restore();
+  // redraw();
 }
 
 
 </script>
 <style>
+svg {
+  background-color: tomato;
+}
 canvas {
-	background-color: #eaf2ff;
+  background-color: #eaf2ff;
 }
 </style>
