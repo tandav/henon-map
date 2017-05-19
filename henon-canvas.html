@@ -5,7 +5,7 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
-const n = 5000;
+const n = 1000;
 // a, b scope
 const a_min = -0.5;
 const a_max = 0.5;
@@ -54,54 +54,69 @@ let xy_plot_yScale = d3.scaleLinear()
     .range([ width, 0 ]);
 
 canvas.call(d3.zoom()
-    .scaleExtent([1 / 32, 4])
+    .scaleExtent([1 / 32, 1000])
     .on("zoom", zoomed));
 
-drawPoints();
+// drawPoints();
+
+drawPoints(d3.zoomIdentity);
+
+// function zoomed() {
+//   context.clearRect(0, 0, width, height);
+//   drawPoints(d3.event.transform);
+// }
 
 function zoomed() {
-  context.save();
+  // context.save();
   context.clearRect(0, 0, width, height);
-  context.translate(d3.event.transform.x, d3.event.transform.y);
-  context.scale(d3.event.transform.k, d3.event.transform.k);
-  drawPoints();
-  context.restore();
+  // context.translate(d3.event.transform.x, d3.event.transform.y);
+  // context.scale(d3.event.transform.k, d3.event.transform.k);
+  // drawPoints();
+  drawPoints(d3.event.transform);
+  // context.restore();
 }
 
-function drawPoints() {
+// function drawPoints() {
+//   context.beginPath();
+//   hmap.forEach(drawPoint);
+//   context.fill();
+// }
+
+function drawPoints(transform) {
   context.beginPath();
+  // hmap.map(rescale);
+  hmap.map(transform.apply, transform).forEach(drawPoint);
+  context.fill();
+}
+
+
+function drawPoints2() {
+  context.beginPath();
+  // hmap.map(rescale).forEach(drawPoint);
+  hmap.map(point => [xy_plot_xScale(point[0]), xy_plot_yScale(point[1])]).forEach(drawPoint);
   hmap.forEach(drawPoint);
   context.fill();
 }
 
-function drawPoint(point) {
-  context.moveTo(xy_plot_xScale(point[0]) + radius, xy_plot_yScale(point[1]));
-  context.arc(xy_plot_xScale(point[0]), xy_plot_yScale(point[1]), radius, 0, 2 * Math.PI);
+function rescale(point) {
+  return [xy_plot_xScale(point[0]), xy_plot_yScale(point[1])];
 }
 
-function phyllotaxis(radius) {
-  var theta = Math.PI * (3 - Math.sqrt(5));
-  return function(i) {
-    var r = radius * Math.sqrt(i), a = theta * i;
-    return [
-      width / 2 + r * Math.cos(a),
-      height / 2 + r * Math.sin(a)
-    ];
-  };
+function drawPoint(point) {
+  context.moveTo(point[0] + radius, point[1]);
+  context.arc(point[0], point[1], radius, 0, 2 * Math.PI);
 }
 
 function henon_map(a, b, x0, y0, n) {
     hmap[0] = [x0, y0];
-    for (let i = 1; i < n; i++)
-    {
-        hmap[i] = [1 - a * Math.pow(hmap[i - 1][0], 2) + hmap[i - 1][1], b * hmap[i - 1][0]]
+    for (let i = 1; i < n; i++) {
+      hmap[i] = [1 - a * Math.pow(hmap[i - 1][0], 2) + hmap[i - 1][1], b * hmap[i - 1][0]]
 
-        // prevent infinity
-        if (Math.abs(hmap[i][0]) > 1e6 || Math.abs(hmap[i][1]) > 1e6) { 
-            hmap[i] = [0, 0]; 
-        }
+      // prevent infinity, TODO: try del
+      if (Math.abs(hmap[i][0]) > 1e6 || Math.abs(hmap[i][1]) > 1e6) { 
+          hmap[i] = [0, 0]; 
+      }
     }
-
     // points = hmap;
     // return hmap;
 }
@@ -109,19 +124,17 @@ function henon_map(a, b, x0, y0, n) {
 d3.select('svg')
   .on("mousemove", mouse_mooved);
 
-function mouse_mooved() 
-{
+function mouse_mooved() {
   let mouse = d3.mouse(this);
-  let mouse_unzoomed = d3.mouse(d3.select("svg").node());
+  // let mouse_unzoomed = d3.mouse(d3.select("svg").node());
   // red_pointer.attr("cx", mouse[0]).attr("cy", mouse[1]);
   // red_pointer.attr("cx", mouse_unzoomed[0]).attr("cy", mouse_unzoomed[1]);
   // red_pointer.attr("cx", d3.event.pageX).attr("cy", d3.event.pageY);
-  henon_map(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n);
-
-  context.save();
-  context.clearRect(0, 0, width, height);
-  drawPoints();
-  context.restore();
+  henon_map(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n); // right values, works well
+  // context.save();
+  context.clearRect(0, 0, width, height); // try del this line for fun!
+  drawPoints2();
+  // context.restore();
   // redraw();
 }
 
