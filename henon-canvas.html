@@ -113,6 +113,35 @@ function drawPoint(point) {
 }
 
 
+// draw ab lines
+var ab_lines = d3.select("svg").append("g")
+  .attr("class", "ab_lines")
+
+ab_lines.append("line")
+  .attr("x1", a_scale(a_min))
+  .attr("y1", b_scale(1.0))
+  .attr("x2", a_scale(a_max))
+  .attr("y2", b_scale(1.0))
+  .attr("stroke", "black")
+  .attr("stroke-width", "0.5");
+
+ab_lines.append("line")
+  .attr("x1", a_scale(a_min))
+  .attr("y1", b_scale(-1.0))
+  .attr("x2", a_scale(a_max))
+  .attr("y2", b_scale(-1.0))
+  .attr("stroke", "black")
+  .attr("stroke-width", "0.5");
+
+ab_lines.append("line")
+  .attr("x1", a_scale(0))
+  .attr("y1", b_scale(b_min))
+  .attr("x2", a_scale(0))
+  .attr("y2", b_scale(b_max))
+  .attr("stroke", "black")
+  .attr("stroke-width", "0.5");
+
+
 </script>
 <style>
 svg {
