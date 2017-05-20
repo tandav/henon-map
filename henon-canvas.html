@@ -24,6 +24,7 @@ const ymin = -6.2;
 const ymax = ymin + xy_radius;
 
 
+
 let canvas = d3.select("canvas"),
     context = canvas.node().getContext("2d"),
     width = canvas.property("width"),
@@ -43,33 +44,33 @@ function henon_map(a, b, x0, y0, n) {
 
       // prevent infinity, TODO: try del
       if (Math.abs(henon_math[i][0]) > 1e6 || Math.abs(henon_math[i][1]) > 1e6) { 
-          henon_math[i] = [0, 0]; 
+        henon_math[i] = [0, 0]; 
       }
     }
 }
 
 // scales
 let a_scale = d3.scaleLinear()
-    .domain([a_min, a_max])
-    .range([0, width])
+  .domain([a_min, a_max])
+  .range([0, width])
 
 let b_scale = d3.scaleLinear()
-    .domain([b_min, b_max])
-    .range([width, 0])
+  .domain([b_min, b_max])
+  .range([width, 0])
 
 // scales 
 let xy_plot_xScale = d3.scaleLinear()
-    .domain([xmin, xmax]) // the range of the values to plot
-    // .range([ 2*margin, width_unit - 2 *margin]); // the pixel range of the x-axis
-    .range([0, width]); // the pixel range of the x-axis
+  .domain([xmin, xmax]) // the range of the values to plot
+  // .range([ 2*margin, width_unit - 2 *margin]); // the pixel range of the x-axis
+  .range([0, width]); // the pixel range of the x-axis
 let xy_plot_yScale = d3.scaleLinear()
-    .domain([ymin, ymax])
-    // .range([ width_unit - margin, margin ]);
-    .range([ width, 0 ]);
+  .domain([ymin, ymax])
+  // .range([ width_unit - margin, margin ]);
+  .range([ width, 0 ]);
 
 canvas.call(d3.zoom()
-    .scaleExtent([1 / 16, 10])
-    .on("zoom", zoomed));
+  .scaleExtent([1 / 16, 10])
+  .on("zoom", zoomed));
 
 let global_transform = d3.zoomIdentity;
 henon_map((a_min + a_max) / 2, -1.01, x0, y0, n); // change henon_math with a,b coefficiens from mouse
