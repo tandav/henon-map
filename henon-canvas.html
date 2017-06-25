@@ -78,8 +78,23 @@ henon_map((a_min + a_max) / 2, -1.01, x0, y0, n); // change henon_math with a,b 
 // draw_after_pan_zoom(global_transform); // this needs for first time?
 draw_after_mousemove();
 
-d3.select('svg')
-  .on("mousemove", mouse_mooved);
+// d3.select('svg')
+//   .on("mousemove", mouse_mooved)
+//   .on("zoom", zoomed_ab);
+
+
+let ab_plot = d3.select('svg').append("rect")
+    .on("mousemove", mouse_mooved)
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .call(d3.zoom()
+        .scaleExtent([1, 16])
+        .translateExtent([[0, 0], [width, height]]) // pan bounds
+        .on("zoom", zoomed_ab));
+
+
 
 function draw_after_mousemove() {
   context.beginPath();
@@ -87,12 +102,22 @@ function draw_after_mousemove() {
   draw_after_pan_zoom(global_transform);
   context.fill();
 }
-
+// 
 function mouse_mooved() {
   let mouse = d3.mouse(this);
   henon_map(a_scale.invert(mouse[0]), b_scale.invert(mouse[1]), x0, y0, n); // change henon_math with a,b coefficiens from mouse
   context.clearRect(0, 0, width, height); // try del this line for fun!
   draw_after_mousemove();
+}
+
+function zoomed_ab() {
+  ab_lines.attr("transform", d3.event.transform);
+  ab_plot.attr("transform", d3.event.transform);
+
+
+  // context.clearRect(0, 0, width, height);
+  // draw_after_pan_zoom(d3.event.transform);
+  // global_transform = d3.event.transform; // maybe pass this as argument somehow?
 }
 
 function draw_after_pan_zoom(transform) {
@@ -113,9 +138,14 @@ function drawPoint(point) {
 }
 
 
+
+
 // draw ab lines
 var ab_lines = d3.select("svg").append("g")
   .attr("class", "ab_lines")
+
+
+
 
 ab_lines.append("line")
   .attr("x1", a_scale(a_min))
@@ -140,6 +170,7 @@ ab_lines.append("line")
   .attr("y2", b_scale(b_max))
   .attr("stroke", "black")
   .attr("stroke-width", "0.5");
+
 
 
 </script>
